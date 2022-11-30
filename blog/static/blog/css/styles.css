@@ -5,9 +5,33 @@
 
 
 .content-all {
-	background: rgba(20, 115, 250, 0.3);
+/*	background: rgba(20, 115, 250, 0.3);*/
+	background: rgb(71, 71, 71) ;
 	padding: 50px 50px 20px 50px;
 }
 
+body {
+	color: white;
+}
 
-style="padding-bottom: 50px; padding-top: 50px;
+.car_title {
+	font-size: 30px;/*размер шрифта*/
+/*	text-transform: uppercase;/*все буквы заглаыные*/*/
+	letter-spacing: .1em;/*межбуквенное расстояние*/
+	padding-top: 15px;/*размер поля от верхнего края соержимого элемента*/
+	padding-bottom: 10px;/*размер поля от нижнего края соержимого элемента*/
+}
+
+
+
+.car_desc {
+	font-size: 20px;/*размер шрифта*/
+	text-transform: uppercase;/*все буквы заглаыные*/
+	letter-spacing: .2em;/*межбуквенное расстояние*/
+}
+
+
+
+.car_text {
+	padding-right: 20px;/*элемента устанавливает значение поля от правого края элемента*/
+}

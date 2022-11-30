@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from .models import *
 
 
 # домашняя страница
@@ -19,8 +20,12 @@ def categories(request, category_id):  # в скобках то что полу�
 
 
 # страница отдельной машины
-def car(request, car_id):
-    return HttpResponse(f'<h1>Страница отдельной машины</h1><p>№ { car_id }</p>')
+def car(request, car_slug):
+    car = Car.objects.get(slug=car_slug)
+    context = {
+        'car': car,
+    }
+    return render(request, 'blog/car.html', context=context)
 
 
 # Create your views here.

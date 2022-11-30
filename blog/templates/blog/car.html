@@ -1,0 +1,32 @@
+{% extends 'blog/base.html' %} 
+
+{% block title %} 
+	{{ car.title }}
+{% endblock %}
+
+{% block content %}
+
+<h1 class="car_title">{{ car.title }}</h1><br>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-6">
+			{% if car.photo %}
+			<img src="{{ car.photo.url }}" class="img-fluid"><br>
+			{% endif %}
+			<p>Производство: {{ car.cat }}</p>
+			<h3 class="car_desc">Технические характеристики</h3>
+			<p>{{ car.tth|linebreaks}}</p><br>
+			<p>Время обновления поста: {{ car.time_update }}</p>
+
+		</div>
+		<div class="col-6">
+			<h3 class="car_desc">Описание модели</h3>
+			<p>{{ car.content|linebreaks }}</p><br>
+		</div>		
+	</div>
+</div>
+
+
+{% endblock %}
