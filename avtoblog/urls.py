@@ -14,8 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf.urls.static import static  # пути к статическим файлам
+from . import settings  # для MEDIA_URL MEDIA_ROOT
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('blog.urls')),  # путь к путям приложения blog
 ]
+
+if settings.DEBUG:
+    # к путям добавляем путь к статическим данным, графическим данным
+    # на реальных серверах обычно это не используется
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

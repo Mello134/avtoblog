@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'blog.apps.BlogConfig',  # наше приложение blog
+
 ]
 
 MIDDLEWARE = [
@@ -121,7 +123,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'static/'  # стандартно
+# STATIC_ROOT добавили, в эту папку при collectstatic - django перемещает все статические файлы
+# путь avtoblog-project/avtoblog - из этой папке, статический файлы будут пользоваться в режиме эксплуатации сайта на сервере
+STATIC_ROOT = BASE_DIR / 'static'
+# добавили пустой список, список нестандартных путей, пока у нас нет, оставим пустым
+STATICFILES_DIRS = []
+
+MEDIA_ROOT = BASE_DIR / 'media'  # будет загружать медиа в папку media
+MEDIA_URL = '/media/'  # добавили url - будет отображаться в браузере
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
