@@ -5,12 +5,12 @@ from .models import *
 
 # домашняя страница
 def home(request):
+    cars = Car.objects.all()
     context = {
-        'title': 'Главная страница',
-        'key_2': 'Значение 2',
+        'title': 'Все модели',
+        'cars': cars,
     }
     return render(request, 'blog/home.html', context=context)
-
 
 # страница категорий
 def categories(request, category_id):  # в скобках то что получаем в запросе

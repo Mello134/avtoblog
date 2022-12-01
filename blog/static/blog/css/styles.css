@@ -1,37 +1,78 @@
-/*body {
-	background-color: blue;
-}*/
-.last {float: right;}
-
 
 .content-all {
 /*	background: rgba(20, 115, 250, 0.3);*/
 	background: rgb(71, 71, 71) ;
 	padding: 50px 50px 20px 50px;
-}
-
-body {
 	color: white;
 }
 
+
+
 .car_title {
-	font-size: 30px;/*размер шрифта*/
-/*	text-transform: uppercase;/*все буквы заглаыные*/*/
+	font-size: 30px; /*размер шрифта*/
+	text-transform: uppercase; /*все буквы заглаыные*/
+	letter-spacing: .1em; /*межбуквенное расстояние*/
+	padding-top: 15px; /*размер поля от верхнего края соержимого элемента*/
+	padding-bottom: 10px; /*размер поля от нижнего края соержимого элемента*/
+}
+
+
+.text_nav {
+	font-size: 25px;/*размер шрифта*/
 	letter-spacing: .1em;/*межбуквенное расстояние*/
-	padding-top: 15px;/*размер поля от верхнего края соержимого элемента*/
-	padding-bottom: 10px;/*размер поля от нижнего края соержимого элемента*/
+	padding-right: 20px;
+}
+
+.text_side {
+	font-size: 25px;/*размер шрифта*/
+	letter-spacing: .1em;/*межбуквенное расстояние*/
 }
 
 
 
-.car_desc {
-	font-size: 20px;/*размер шрифта*/
+
+.text_desc {
+	font-size: 25px;/*размер шрифта*/
 	text-transform: uppercase;/*все буквы заглаыные*/
 	letter-spacing: .2em;/*межбуквенное расстояние*/
 }
 
 
 
-.car_text {
-	padding-right: 20px;/*элемента устанавливает значение поля от правого края элемента*/
+/*.car_text {*/
+	/*элемента устанавливает значение поля от правого края элемента*/
+/*	padding-right: 20px;
+}*/
+
+
+
+
+
+
+/*body {
+   background-color: #222327;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   height: 100vh;
+   margin: 0;
+}*/
+
+
+.text_shadow {
+   font-family: 'Rubik Mono One', sans-serif;
+   font-size: 64px;
+   text-align: center;
+/*   текст заливки если не включена прозрачность*/
+   color: #000000;
+/*   тень снизу/сверху*/
+   text-shadow: 10px 10px 30px #000000, -10px -10px 30px #ffffff; 
+/*   текст и толщина обводки*/
+   -webkit-text-stroke: 1.5px #ffffff;
+/*   прозрачность*/
+/*   -webkit-text-fill-color: transparent;*/
+/*	расстояние между буквами*/
+   letter-spacing: 5px;
+/*   все буквы заклавные*/
+   text-transform: uppercase;
 }
