@@ -1,6 +1,5 @@
 {% extends 'blog/base.html' %} 
 
-{% load static %}
 
 {% block title %} 
 	{{ car.title }}
@@ -20,7 +19,9 @@
 			{% if car.photo %}
 			<img src="{{ car.photo.url }}" class="img-fluid"><br>
 			{% endif %}
-			<p>Производство: {{ car.cat }}</p>
+			<a href="{{ car.cat.get_absolute_url }}" class="nav-link active">
+				<p>Производство: {{ car.cat }}</p>
+			</a>
 			<h3 class="text_desc">Технические характеристики</h3>
 			<p>{{ car.tth|linebreaks}}</p><br>
 			<p class="text-muted">Время обновления поста: {{ car.time_update }}</p>

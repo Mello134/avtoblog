@@ -22,7 +22,7 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark bg-gradient text_nav">
+	<nav class="navbar navbar-expand-xxl navbar-dark bg-dark bg-gradient text_nav">
 	  <div class="container-fluid">
 	    <a class="navbar-brand" href="/">
 	    	<img src="{% static 'blog/images/1.png' %}">
@@ -56,27 +56,8 @@
 	</nav>
 
 
+	{% include 'blog/sidebar.html' %}
 
-	<div class="container-fluid ">
-		<div class="row">
-			<div class="col-2 bg-dark bg-gradient">
-				<br><br>
-				<ul class="nav flex-column text_side" >
-				<br><br>
-				  <li class="nav-item">
-				    <a class="nav-link active" aria-current="page" href="#">Все категории</a>
-				  </li>
-				  <li class="nav-item">
-				    <a class="nav-link" href="#">Япония</a>
-				  </li>
-				  <li class="nav-item">
-				    <a class="nav-link" href="#">Америка</a>
-				  </li>
-				  <li class="nav-item">
-				    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-				  </li>
-				</ul>
-			</div>
  <!-- bg-gradient content-all -->
 			<div class="col-10 bg-gradient content-all">
 				<div class="container-fluid">

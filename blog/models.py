@@ -29,7 +29,7 @@ class Car(models.Model):
     # функция формирования маршрута к ссылке
     def get_absolute_url(self):  # self - ссылка на один экземпляр(строку) таблицы модели
         # получаем путь('path name=car, 'car/<slug:car_slug>/) = 127/car/supra)
-        return reverse('car', kwargs={'car_slug': self.slug})  # self.slug - атрибут slug
+        return reverse('car', kwargs={'cat_slug': self.cat.slug, 'car_slug': self.slug})  # self.slug - атрибут slug
 
 
 class Category(models.Model):
@@ -45,3 +45,7 @@ class Category(models.Model):
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
         ordering = ['id']  # сортировка, сначала по id
+
+    # функция формирования маршрута к ссылке
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'cat_slug': self.slug})
