@@ -24,7 +24,9 @@ class Car(models.Model):
     class Meta:
         verbose_name = "Автомобиль"
         verbose_name_plural = "Автомобили"
-        ordering = ['-time_create', 'title']  # сортировка, сначала по дате создания, потом по имени
+        ordering = ['title']  # рандом сортировка
+        # ordering = ['?']  # рандом сортировка
+        # ordering = ['-time_create', 'title']  # сортировка, сначала по дате создания, потом по имени
 
     # функция формирования маршрута к ссылке
     def get_absolute_url(self):  # self - ссылка на один экземпляр(строку) таблицы модели
@@ -44,7 +46,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
-        ordering = ['id']  # сортировка, сначала по id
+        ordering = ['name']  # сортировка, сначала по name
 
     # функция формирования маршрута к ссылке
     def get_absolute_url(self):

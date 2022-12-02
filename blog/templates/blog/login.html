@@ -1,0 +1,55 @@
+{% extends 'blog/base.html' %} 
+
+
+{% block title %} 
+	Аутентификация
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<!-- lead text-center text-light -->
+<h1>{{ title }}</h1><br>
+
+	<form method="post">
+	{% csrf_token %}
+
+	<!-- ошибки если неверный логин и пароль -->
+	<div class="form-error">
+		{{ form.non_field_errors }}
+	</div>
+	
+	{% for f in form %}
+	<p>
+	<label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}
+	</p>
+	<div class="form-error">{{ f.errors }}</div>
+
+	<!-- ошибки если возникнут -->
+	<div class="form-error">
+		{{ f.errors }}
+	</div>
+
+
+	{% endfor %}
+
+	<button type="submit" class="btn btn-primary btn-lg">
+		Войти
+	</button>
+
+
+	<br><br><br><br><br><br>
+	<p>
+		Если вы ещё незарегестрированны,<br>
+		пройдите процедуру регистрации
+	</p>
+	<p>
+		<a href="{% url 'register' %}" class="btn btn-warning btn-sm">Регистрация</a>
+	</p>
+</form>
+
+
+
+{% endblock %}

@@ -1,18 +1,18 @@
 
 	<div class="container-fluid ">
 		<div class="row">
-			<div class="col-2 bg-dark bg-gradient">
+			<div class="col-lg-2 bg-dark bg-gradient">
 				<br><br>
 				<ul class="nav flex-column text_side" >
 				
 
 				  {% if cat_selected != 'all' %}
 				  <li class="nav-item">
-				    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Все категории</a>
+				    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Все модели</a>
 				  </li>
 				  {% else %}
 				  <li class="nav-item">
-				    <a class="nav-link disabled" href="{% url 'home' %}" tabindex="-1" aria-disabled="true">Все категории</a>
+				    <a class="nav-link disabled" href="{% url 'home' %}" tabindex="-1" aria-disabled="true">Все модели</a>
 				  </li>
 				  {% endif %}	
 
@@ -37,3 +37,4 @@
 
 				</ul>
 			</div>
+

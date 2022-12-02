@@ -1,12 +1,9 @@
-
 .content-all {
 /*	background: rgba(20, 115, 250, 0.3);*/
 	background: rgb(71, 71, 71) ;
 	padding: 50px 50px 20px 50px;
 	color: white;
 }
-
-
 
 .car_title {
 	font-size: 30px; /*размер шрифта*/
@@ -16,48 +13,22 @@
 	padding-bottom: 10px; /*размер поля от нижнего края соержимого элемента*/
 }
 
-
 .text_nav {
-	font-size: 25px;/*размер шрифта*/
+	font-size: 20px;/*размер шрифта*/
 	letter-spacing: .1em;/*межбуквенное расстояние*/
-	padding-right: 20px;
+	padding-right: 30px;
 }
 
 .text_side {
-	font-size: 25px;/*размер шрифта*/
+	font-size: 20px;/*размер шрифта*/
 	letter-spacing: .1em;/*межбуквенное расстояние*/
 }
-
-
-
 
 .text_desc {
 	font-size: 25px;/*размер шрифта*/
 	text-transform: uppercase;/*все буквы заглаыные*/
 	letter-spacing: .2em;/*межбуквенное расстояние*/
 }
-
-
-
-/*.car_text {*/
-	/*элемента устанавливает значение поля от правого края элемента*/
-/*	padding-right: 20px;
-}*/
-
-
-
-
-
-
-/*body {
-   background-color: #222327;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   height: 100vh;
-   margin: 0;
-}*/
-
 
 .text_shadow {
    font-family: 'Rubik Mono One', sans-serif;
@@ -75,4 +46,28 @@
    letter-spacing: 5px;
 /*   все буквы заклавные*/
    text-transform: uppercase;
+}
+
+.form-input {
+    width: 250px;
+    font-size: 16px;
+}
+
+.form-label {
+    display: inline-block;
+    min-width: 150px;  /* для выравнивания форм от текста с названием*/
+    vertical-align: top;
+}
+
+.form-error ul{
+    list-style: none;
+    padding: 0;
+    color: rgb(255, 175, 175);
+    font-size: 20px;
+    letter-spacing: .2em;/*межбуквенное расстояние*/
+}
+
+.form-button {
+    min-width: 200px;
+    font-size: 16px;
 }

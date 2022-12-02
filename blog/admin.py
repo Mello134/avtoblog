@@ -23,6 +23,8 @@ class CarAdmin(admin.ModelAdmin):
             # mark_safe - не экранирует теги
             return mark_safe(f"<img src='{object.photo.url}' width=50>")
 
+    get_html_photo.short_description = "Миниатюра"
+
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}  # автозаполнение слага по имени категории
