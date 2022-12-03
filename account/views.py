@@ -1,4 +1,5 @@
 from django.contrib.auth import logout, login
+from django.contrib.auth.models import User  # модель User
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -53,3 +54,18 @@ class LoginUser(DataMixin, LoginView):
 def logout_user(request):
     logout(request)  # стандартный выход пользователя
     return redirect('login')  # перенаправляет залогиниться
+
+
+# просмотр информации о пользователе
+def show_profile(request):
+    current_user = request.user
+
+    user_info = User.objects.get(username=current_user)
+
+    all_user = User.objects.all()
+    context = {
+        'all_user': all_user,
+        'current_user': current_user,
+        'user_info': user_info,
+    }
+    return render(request, 'account/profile.html', context=context)

@@ -67,6 +67,14 @@
     letter-spacing: .2em;/*межбуквенное расстояние*/
 }
 
+.form-error{
+    list-style: none;
+    padding: 0;
+    color: rgb(255, 175, 175);
+    font-size: 20px;
+    letter-spacing: .2em;/*межбуквенное расстояние*/
+}
+
 .form-button {
     min-width: 200px;
     font-size: 16px;

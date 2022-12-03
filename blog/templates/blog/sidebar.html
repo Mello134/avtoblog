@@ -1,40 +1,33 @@
+<div class="col-lg-2 bg-dark bg-gradient">
+	<br><br>
+	<ul class="nav flex-column text_side" >
+	
 
-	<div class="container-fluid ">
-		<div class="row">
-			<div class="col-lg-2 bg-dark bg-gradient">
-				<br><br>
-				<ul class="nav flex-column text_side" >
-				
-
-				  {% if cat_selected != 'all' %}
-				  <li class="nav-item">
-				    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Все модели</a>
-				  </li>
-				  {% else %}
-				  <li class="nav-item">
-				    <a class="nav-link disabled" href="{% url 'home' %}" tabindex="-1" aria-disabled="true">Все модели</a>
-				  </li>
-				  {% endif %}	
+	  {% if cat_selected != 'all' %}
+	  <li class="nav-item">
+	    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Все модели</a>
+	  </li>
+	  {% else %}
+	  <li class="nav-item">
+	    <a class="nav-link disabled" href="{% url 'home' %}" tabindex="-1" aria-disabled="true">Все модели</a>
+	  </li>
+	  {% endif %}	
 
 
-				  {% for category in all_categories %}
-				  
+	  {% for category in all_categories %}
+	  
 
-				  {% if cat_selected == category.slug %}
-				  <li class="nav-item">
-				    <a class="nav-link disabled" href="{{ category.get_absolute_url }}" tabindex="-1" aria-disabled="true">{{ category.name }}</a>
-				  </li>
-				  {% else %}
-				  <li class="nav-item">
-				    <a class="nav-link" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
-				  </li>
-				  {% endif %}
+	  {% if cat_selected == category.slug %}
+	  <li class="nav-item">
+	    <a class="nav-link disabled" href="{{ category.get_absolute_url }}" tabindex="-1" aria-disabled="true">{{ category.name }}</a>
+	  </li>
+	  {% else %}
+	  <li class="nav-item">
+	    <a class="nav-link" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+	  </li>
+	  {% endif %}
 
-				  {% endfor %}
-
-
-
-
-				</ul>
-			</div>
+	  {% endfor %}
+	</ul>
+</div>
 

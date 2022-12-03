@@ -1,0 +1,42 @@
+{% extends 'blog/base.html' %} 
+
+
+{% block title %} 
+	Страница профиля
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Сюда выведи вюда информацию о профиле</h1>
+
+{% for user in all_user %}
+
+<h4>{{ user.id }}</h4>
+<h4>{{ user.username }}</h4>
+<h4>{{ user.password }}</h4>
+<br>
+{% endfor %}
+
+<br><br><br>
+{{ current_user }}
+<br><br><br>
+
+
+
+<h2>{{ user.id }}</h2>
+<h4>login: {{ user_info.username }}</h4>
+<h4>мыло: {{ user_info.email }}</h4>
+<h4>Имя: {{ user_info.first_name }}</h4>
+<h4>Фамилия: {{ user_info.last_name }}</h4>
+<h4>Пароль: {{ user_info.password }}</h4>
+
+
+
+
+
+
+
+
+{% endblock %}
+

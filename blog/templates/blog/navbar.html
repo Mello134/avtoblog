@@ -1,0 +1,48 @@
+{% load static %}
+<nav class="navbar navbar-expand-xl navbar-dark bg-dark bg-gradient text_nav">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+    	<img src="{% static 'blog/images/1.png' %}">
+    	AVTOBLOG
+	</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText" >
+      <ul class="navbar-nav me-auto mb-2 ps-3 mb-lg-0">
+        <li class="nav-item mx-3">
+          <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/admin/"> Админка </a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link active" href="#"> Контакты </a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link active" href="#"> Обратная связь </a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link active" href="{% url 'add_post' %}"> Добавить пост </a>
+        </li>
+
+
+
+      </ul>
+
+      	<span class="nav-text text-light">
+
+      		<!-- если пользователь залогиненый -->
+      		{% if request.user.is_authenticated %}
+      		<span class="text-info" style="letter-spacing: .2em; font-size: 20px;">{{ user.username }} </span> <a class="nav-link active text-warning" href="{% url 'logout' %}">Выйти</a>
+
+      		<!-- иначе пользователь незалогинен -->
+      		{% else %}
+	      	<a class="nav-link active" href="{% url 'register' %}">Регистрация</a>
+	      	<a class="nav-link active" href="{% url 'login' %}">Войти</a>
+	      	{% endif %}
+
+      	</span>
+	    </li>
+    </div>
+  </div>
+</nav>

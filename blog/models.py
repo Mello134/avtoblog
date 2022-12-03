@@ -9,7 +9,7 @@ class Car(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
     content = models.TextField(blank=True,
                                verbose_name='Текст статьи')  # текстовое поле без ограничений, blank=True - поле может быть пустым
-    tth = models.TextField(blank=True, verbose_name='Технические характеристики авто')
+    tth = models.TextField(blank=True, verbose_name='Характеристики')
     photo = models.ImageField(upload_to='photos/%Y/%m', verbose_name='Фото')  # загружать будем в photos/год/месяц
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Время изменения')

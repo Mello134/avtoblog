@@ -1,0 +1,55 @@
+{% extends 'blog/base.html' %} 
+
+
+{% block title %} 
+	{{ title }}
+{% endblock %}
+
+
+{% block content %}
+
+
+
+
+<h1>{{ title }}</h1><br>
+
+<!-- если пользователь залогиненый -->
+{% if request.user.is_authenticated %}
+
+<form action="{%  url 'add_post' %}" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	
+	<div class="form-error">{{ form.non_field_errors }}</div>
+
+	{% for f in form %}
+
+	<p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}:</label>{{ f }}</p>
+
+	<div class="form-error">{{ f.errors }}</div>
+
+	{% endfor %}
+
+	<button type="submit" class="btn btn-primary btn-lg">
+		Сохранить запись
+	</button>
+</form>
+
+{% else %}
+
+
+<div class="form-error">
+	<p>Только авторизованные пользователи могут добавлять новые статьи.</p>
+	<br><br>
+	<p>
+		Пройдите авторизацию: <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Войти</a>
+	</p>
+	<p>
+		Либо зарегистрируйтесь:<a href="{% url 'register' %}" class="btn btn-warning btn-sm">Регистрация</a>
+ 
+	</p>
+</div>
+
+{% endif %}
+
+
+{% endblock %}

@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import CarAddForm
 from .models import *
 from django.core.paginator import Paginator
 
@@ -56,6 +57,21 @@ def show_car(request, car_slug, cat_slug):
     return render(request, 'blog/car.html', context=context)
 
 
+def show_add_post(request):
+    if request.method == 'POST':  # если уже введены какие-то данные
+        # request.FILES - Обязательно если есть файлы, изображения и ТД
+        form = CarAddForm(request.POST, request.FILES)  # форма = заполненная форма
+        if form.is_valid():  # проверка правильности формы, если форма заполнена правильно
+            form.save()  # сохраняет запись в БД
+            return redirect('home')  # перенаправление домой при успешном заполнении
+    else:  # если никаких данный пользователь ещё не вводил
+        form = CarAddForm()  # отображаем пустую форму для заполнения
 
+    context = {
+          'title': 'Добавление статьи',
+          'all_categories': all_categories,
+          'form': form,
+      }
+    return render(request, 'blog/add_post.html', context=context)
 
 
