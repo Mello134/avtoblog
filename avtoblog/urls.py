@@ -21,6 +21,7 @@ from . import settings  # для MEDIA_URL MEDIA_ROOT
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),  # путь к путям приложения blog
+    path('', include('account.urls')),  # путь к путям приложения account
 ]
 
 if settings.DEBUG:
