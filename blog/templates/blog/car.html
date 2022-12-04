@@ -25,6 +25,13 @@
 			<h3 class="text_desc">Технические характеристики</h3>
 			<p>{{ car.tth|linebreaks}}</p><br>
 			<p class="text-muted">Время обновления поста: {{ car.time_update }}</p>
+
+
+			<a class="btn btn-warning" href="{% url 'update_post' car_slug=car.slug cat_slug=car.cat.slug %}">Редактировать статью</a>
+			
+			<a class="btn btn-danger" href="{% url 'delete_post' car_slug=car.slug cat_slug=car.cat.slug %}">Удалить статью</a>
+
+
 		</div>
 		<div class="col-6">
 			<h3 class="text_desc">Описание модели</h3>

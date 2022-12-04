@@ -1,0 +1,45 @@
+{% extends 'blog/base.html' %} 
+
+{% block title %} 
+	{{ title }}
+{% endblock %}
+
+
+{% block content %}
+
+<h1>{{ title }}</h1><br>
+
+<!-- если пользователь залогиненый -->
+{% if request.user.is_authenticated %}
+
+<div class="form-error">Удалить статью: "{{ object }}"!?</div>
+<br>
+
+
+<form method="post">
+
+	{% csrf_token %}
+
+	<button type="submit" class="btn btn-danger btn-lg">
+		Удалить статью
+	</button>
+
+</form>
+
+{% else %}
+
+<div class="form-error">
+	<p>Только авторизованные пользователи могут удалять статьи.</p>
+	<br><br>
+	<p>
+		Пройдите авторизацию: <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Войти</a>
+	</p>
+	<p>
+		Либо зарегистрируйтесь:<a href="{% url 'register' %}" class="btn btn-warning btn-sm">Регистрация</a>
+ 
+	</p>
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -61,6 +61,8 @@
     	</span>
     </div> -->
 
+    <!-- если есть разбивка по страницам -->
+    {% if page_obj.has_other_pages %}
 
 	<div class="pagination justify-content-center">
     	<span class="step-links">
@@ -93,7 +95,8 @@
 	        </ul>
     	</span>
     </div>
-
+    
+    {% endif %}
 
 
 

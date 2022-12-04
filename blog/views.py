@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CarAddForm
+from django.urls import reverse_lazy  # перенаправление
+from django.views.generic import UpdateView, DeleteView
+
+from .forms import CarAddForm, CarUpdateForm
 from .models import *
 from django.core.paginator import Paginator
 
+from .utils import DataMixin
 
 all_categories = Category.objects.all()
 
@@ -73,5 +77,43 @@ def show_add_post(request):
           'form': form,
       }
     return render(request, 'blog/add_post.html', context=context)
+
+
+# редактирование Поста
+class UpdatePostView(DataMixin, UpdateView):
+    model = Car  # связываемся с моделью Car
+    form_class = CarUpdateForm  # связываемся с формой
+    # указываем только car_slug - из get_absolute_ur
+    # несмотря на то что в пути есть и car_slug ? почему так хз
+    slug_url_kwarg = 'car_slug'
+    template_name = 'blog/update_post.html'  # путь к шаблону
+
+    # формируем полный контекст
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
+        c_def = self.get_user_context(title='Изменение поста')  # переменная контекста DataMixin + title
+        return {**context, **c_def}  # в шаблон передаём полный контекст
+
+
+# Представление для удаления статьи
+class DeletePostView(DataMixin, DeleteView):
+    model = Car  # модель из models.py
+    template_name = 'blog/delete_post.html'  # шаблон
+    success_url = reverse_lazy('home')  # после удаления отправит домой
+
+    # !указываем только car_slug - из get_absolute_ur
+    # !несмотря на то что в пути есть и car_slug ? почему так хз
+    slug_url_kwarg = 'car_slug'
+
+    # form_class = не нужно никакой формы
+
+    # формируем полный контекст
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
+        c_def = self.get_user_context(title='Удаление поста')  # переменная контекста DataMixin + title
+        return {**context, **c_def}  # в шаблон передаём полный контекст
+
+
+
 
 
