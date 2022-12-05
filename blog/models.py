@@ -55,3 +55,17 @@ class Category(models.Model):
     # функция формирования маршрута к ссылке
     def get_absolute_url(self):
         return reverse('category', kwargs={'cat_slug': self.slug})
+
+
+# класс комментарии
+class Comment(models.Model):
+    # отношение к определенному посту (записи в Car)
+    car_post = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name='Статья', blank=True, null=True, related_name='comment_car')
+    # автор - связь с моделью User
+    author_comment = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария', blank=True, null=True)
+    # дата создания комментария
+    time_create_comment = models.DateTimeField(auto_now_add=True, verbose_name='Время создания комментария')
+    # текст комментария
+    text_comment = models.TextField(verbose_name='Текст комментария')
+    # статус комментария (видно/не видно)
+    status_comment = models.BooleanField(verbose_name='Видимость комментария', default=True)

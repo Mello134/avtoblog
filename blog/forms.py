@@ -16,7 +16,6 @@ class CarAddForm(forms.ModelForm):
         }
 
 
-
 # форма редактирования поста
 class CarUpdateForm(forms.ModelForm):
     # Чтобы не отображалось - На данный момент: http:///...
@@ -34,12 +33,16 @@ class CarUpdateForm(forms.ModelForm):
         }
 
 
+# форма для комментария
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment  # наша модель
+        # поля отображаемые в форме
+        fields = ['text_comment']
+        widgets = {
+            'text_comment': forms.Textarea(attrs={'rows': 1}),
+        }
 
 
-# form-label
-########################################
-# VIEWS.PY - class UpdatePostView(UpdateView):
-# перенаправление сделать или нет VIEWS.PY - class UpdatePostView(UpdateView):
-# FORMS.PY - PHOTO
-# update_post.html - ДОБААВЬ ошибки ИЛИ ОНИ И ТАК РАБОТАЮТ..
-# update_post.html - <form action="{%  url 'update_post' car_slug=car.slug cat_slug=car.cat.slug %}" method="post" enctype="multipart/form-data">
+# 'text_comment': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
+# form-control-sm

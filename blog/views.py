@@ -1,8 +1,11 @@
+
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy  # перенаправление
-from django.views.generic import UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView, DetailView
+from django.views.generic.edit import FormMixin
 
-from .forms import CarAddForm, CarUpdateForm
+from .forms import CarAddForm, CarUpdateForm, CommentForm  # наши формы forms.py
 from .models import *
 from django.core.paginator import Paginator
 
@@ -51,14 +54,75 @@ def show_categories(request, cat_slug):  # в скобках то что пол�
 
 
 # страница отдельной машины
-def show_car(request, car_slug, cat_slug):
-    car = Car.objects.get(slug=car_slug)
-    context = {
-        'cat_selected': cat_slug,
-        'all_categories': all_categories,
-        'car': car,
-    }
-    return render(request, 'blog/car.html', context=context)
+# def show_car(request, car_slug, cat_slug):
+    # car = Car.objects.get(slug=car_slug)
+    # context = {
+        # 'cat_selected': cat_slug,
+        # 'all_categories': all_categories,
+        # 'car': car,
+    # }
+    # return render(request, 'blog/car.html', context=context)
+
+
+###############################################3
+# для отображения успешности создания формы - не работает!
+# уточни позже
+# class CustomSuccessMessage:
+#    @property
+#    def success_msg(self):
+#        return False
+#
+#    def form_valid(self, form):
+#        messages.success(self.request, self.success_msg)
+#        return super().form_valid(form)
+##################################################
+
+
+# страница отдельной машины
+class ShowCar(DataMixin, DetailView, FormMixin):
+    model = Car
+    template_name = 'blog/car.html'
+    # !указываем только car_slug - из get_absolute_ur
+    # !несмотря на то что в пути есть и car_slug ? почему так хз
+    slug_url_kwarg = 'car_slug'  # !для пути 'category/<slug:cat_slug>/<slug:car_slug>/'
+    # context_object_name = 'car'  # обращаемся в шаблоне {{ car.поле }} - вместо object
+    form_class = CommentForm  # наша форма для комментариев
+    # success_msg = 'Комментарий создан!'  # сообщение при успешном создании комментария - РАЗБЕРИСЬ
+
+    # определим перенаправление на нашу страницу, после отправки комментария, так как в пути у нас есть cat_slug, car_slug
+    def get_success_url(self, **kwargs):
+        # get_object() - это по сути Car.objects.get(1 штука)
+        # kwargs - мы добавляем /<slug:cat_slug>/<slug:car_slug>/
+        # полный наш путь равен пути path = 'car' - для этого и добавляли cat_slug car_slug
+        # То есть при успешном заполнении формы (отправка комментария, нас оставит на этой же странице)
+        return reverse_lazy('car', kwargs={'cat_slug': self.get_object().cat.slug, 'car_slug': self.get_object().slug})
+
+    # переопределяем метод пост (для того чтобы сохранялись комментарии)
+    # self - это все объекты класса
+    # request- запрос от пользователя
+    def post(self, request, **kwargs):
+        form = self.get_form()  # в переменной form занесли ту форму которую отправили
+        # 2
+        if form.is_valid():  # проверка правильности формы
+            return self.form_valid(form)  # выполняется после form_valid - передаёт уже сохранённую форму
+        else:
+            return self.form_invalid(form)  # иначе вернёт что у нас неправильно
+
+    # 1
+    def form_valid(self, form):  # берём форму
+        self.object = form.save(commit=False)
+        self.object.car_post = self.get_object()  # получение и запись экземпляра статьи (одной машины)
+        self.object.author_comment = self.request.user  # получение и запись имени автора
+        self.object.save()  # форма пересохраняется с новыми данными
+        return super().form_valid(form)  # форма передаётся в базу данных и программа продолжит свои действия
+
+    # формируем полный контекст
+    # kwargs = {'cat_slug': self.cat.slug, 'car_slug': self.slug}
+    # kwargs (пример из одного поста) = {'cat_slug': 'italy', 'car_slug': 'ferrari-488-gtb'}
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
+        c_def = self.get_user_context(cat_selected=self.kwargs['cat_slug'])
+        return {**context, **c_def}  # в шаблон передаём полный контекст
 
 
 # добавление нового поста
@@ -115,6 +179,7 @@ class DeletePostView(DataMixin, DeleteView):
         context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
         c_def = self.get_user_context(title='Удаление поста')  # переменная контекста DataMixin + title
         return {**context, **c_def}  # в шаблон передаём полный контекст
+
 
 
 
