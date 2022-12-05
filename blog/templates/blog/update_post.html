@@ -15,7 +15,9 @@
 <h1>{{ title }}</h1><br>
 
 <!-- если пользователь залогиненый -->
-{% if request.user.is_authenticated %}
+<!-- if request.user.is_authenticated %} -->
+<!-- если это автор статьи или администратор -->
+{% if car.author == request.user or request.user.id == 1 %}
 
 <form action="{%  url 'update_post' car_slug=car.slug cat_slug=car.cat.slug %}" method="post" enctype="multipart/form-data">
 	{% csrf_token %}
@@ -61,17 +63,18 @@
 
 
 
-<!-- если пользователь не авторизован -->
+<!-- если пользователь не автор статьи и не администратор -->
 {% else %}
 
 <div class="form-error">
-	<p>Только авторизованные пользователи могут редактировать статьи.</p>
+	<p>Только автор статьи - может редактировать статью.</p>
+	<p>Если вы содавали эту статью с другого акканутра, войдите в него.</p>
 	<br><br>
 	<p>
 		Пройдите авторизацию: <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Войти</a>
 	</p>
-	<p>
-		Либо зарегистрируйтесь:<a href="{% url 'register' %}" class="btn btn-warning btn-sm">Регистрация</a>
+<!-- 	<p>
+		Либо зарегистрируйтесь:<a href="{% url 'register' %}" class="btn btn-warning btn-sm">Регистрация</a> -->
  
 	</p>
 </div>

@@ -1,5 +1,5 @@
 from django import forms
-
+from django.contrib.auth.models import User
 
 from blog.models import *
 
@@ -14,6 +14,7 @@ class CarAddForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'cols': 60, 'rows': 6}),
             'tth': forms.Textarea(attrs={'cols': 60, 'rows': 3}),
         }
+
 
 
 # форма редактирования поста

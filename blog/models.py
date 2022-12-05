@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Car(models.Model):
@@ -16,6 +17,9 @@ class Car(models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Публикация')  # default=True
     # cat_id - id добавится автоматом, ForeignKey - связь Car - c Category
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категории')
+    # автор - (связь с моделью User, при удалении автора - статья переходит админу, стандартно автором будет админ,
+    # поле автор не может быть пустым)
+    author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, verbose_name='Автор', default=1, blank=False)
 
     # с помощью метода запись нашего класса будет выводиться по её заголовку
     def __str__(self):

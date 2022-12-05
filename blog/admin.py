@@ -6,14 +6,14 @@ from .models import *
 
 class CarAdmin(admin.ModelAdmin):
     # список отображаемых столбцов в админ-панели
-    list_display = ('id', 'title', 'time_create', 'get_html_photo', 'is_published')
+    list_display = ('id', 'title', 'time_create', 'get_html_photo', 'is_published', 'author')
     prepopulated_fields = {'slug': ('title',)}  # автозаполнение слага по имени поста
     # список полей на которые можно кликнуть - для редактирования
     list_display_links = ('id', 'title')
     # список полей - ко которым можно вести поиск
     search_fields = ('title', 'content')
     # редактирование поля публикации - в списке - в админке
-    list_editable = ('is_published',)  # запятая - если 1 поле!
+    list_editable = ('is_published', 'author')  # запятая - если 1 поле!
     # фильтр по полям - публикация, время изменения.
     list_filter = ('is_published', 'time_create')
 

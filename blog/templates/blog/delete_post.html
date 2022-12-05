@@ -10,7 +10,10 @@
 <h1>{{ title }}</h1><br>
 
 <!-- если пользователь залогиненый -->
-{% if request.user.is_authenticated %}
+<!-- if request.user.is_authenticated %} -->
+
+<!-- если это автор статьи или администратор -->
+{% if car.author == request.user or request.user.id == 1 %}
 
 <div class="form-error">Удалить статью: "{{ object }}"!?</div>
 <br>
@@ -29,15 +32,17 @@
 {% else %}
 
 <div class="form-error">
-	<p>Только авторизованные пользователи могут удалять статьи.</p>
+	<p>Только автор статьи может удалить статью.</p>
+	<p>Если вы содавали эту статью с другого акканутра, войдите в него.</p>
 	<br><br>
+	
 	<p>
 		Пройдите авторизацию: <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Войти</a>
 	</p>
-	<p>
+<!-- 	<p>
 		Либо зарегистрируйтесь:<a href="{% url 'register' %}" class="btn btn-warning btn-sm">Регистрация</a>
  
-	</p>
+	</p> -->
 </div>
 
 {% endif %}

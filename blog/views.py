@@ -61,20 +61,23 @@ def show_car(request, car_slug, cat_slug):
     return render(request, 'blog/car.html', context=context)
 
 
+# добавление нового поста
 def show_add_post(request):
     if request.method == 'POST':  # если уже введены какие-то данные
         # request.FILES - Обязательно если есть файлы, изображения и ТД
         form = CarAddForm(request.POST, request.FILES)  # форма = заполненная форма
         if form.is_valid():  # проверка правильности формы, если форма заполнена правильно
-            form.save()  # сохраняет запись в БД
+            car = form.save(commit=False)  # commit=False - когда нужно внести изменение в поле модели не из формы!
+            car.author = request.user  # поле автора заполняется автоматически (залогиненый пользователь)
+            car.save()  # сохраняем модель
             return redirect('home')  # перенаправление домой при успешном заполнении
     else:  # если никаких данный пользователь ещё не вводил
         form = CarAddForm()  # отображаем пустую форму для заполнения
 
     context = {
-          'title': 'Добавление статьи',
-          'all_categories': all_categories,
-          'form': form,
+        'title': 'Добавление статьи',
+        'all_categories': all_categories,
+        'form': form,
       }
     return render(request, 'blog/add_post.html', context=context)
 

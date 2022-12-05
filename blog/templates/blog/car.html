@@ -24,13 +24,22 @@
 			</a>
 			<h3 class="text_desc">Технические характеристики</h3>
 			<p>{{ car.tth|linebreaks}}</p><br>
+
+
+
+			<h3>Автор: {{ car.author }}</h3>
 			<p class="text-muted">Время обновления поста: {{ car.time_update }}</p>
 
+			{% if car.author == request.user or request.user.id == 1 %}
 
 			<a class="btn btn-warning" href="{% url 'update_post' car_slug=car.slug cat_slug=car.cat.slug %}">Редактировать статью</a>
-			
 			<a class="btn btn-danger" href="{% url 'delete_post' car_slug=car.slug cat_slug=car.cat.slug %}">Удалить статью</a>
 
+			{% else %}
+
+			<p class="text-info">Вы не можете редактировать эту статью</p>
+			
+			{% endif %}
 
 		</div>
 		<div class="col-6">
