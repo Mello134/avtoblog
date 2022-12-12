@@ -1,70 +1,53 @@
-
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy  # перенаправление
-from django.views.generic import UpdateView, DeleteView, DetailView
+from django.views.generic import UpdateView, DeleteView, DetailView, ListView
 from django.views.generic.edit import FormMixin
 
 from .forms import CarAddForm, CarUpdateForm, CommentForm  # наши формы forms.py
 from .models import *
-from django.core.paginator import Paginator
-
 from .utils import DataMixin
 
-all_categories = Category.objects.all()
+
+# домашняя страница (отображение всех машин)
+class CarsAllShow(DataMixin, ListView):
+    paginate_by = 6  # пагинация
+    model = Car  # модель cars = Car.objects.all()
+    template_name = 'blog/home.html'  # шаблон
+    context_object_name = 'cars'  # objects = cars (просто имя)
+
+    # формируем полный контекст
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)  # контекст Car.object.all()
+        c_def = self.get_user_context(cat_selected='all',
+                                      title='Все модели')  # наш контекст + DataMixin
+        return {**context, **c_def}  # в шаблон передаём полный контекст
 
 
-# домашняя страница
-def show_home(request):
-    cars = Car.objects.all().order_by('?')  # каждое обновление рандомный порядок
+# вывод машин по категориям
+class CarsCategoryShow(DataMixin, ListView):
+    paginate_by = 2
+    model = Car
+    template_name = 'blog/category.html'
+    context_object_name = 'cars'
+    allow_empty = False  # для отображения 404
 
-    paginator = Paginator(cars, 4)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    # параметры вывода (выводим записи только определенной категории)
+    def get_queryset(self):
+        return Car.objects.filter(cat__slug=self.kwargs['cat_slug'])
 
-    context = {
-        'page_obj': page_obj,
-        'cat_selected': 'all',
-        'all_categories': all_categories,
-        'title': 'Все модели',
-        # 'cars': cars,
-    }
-    return render(request, 'blog/home.html', context=context)
-
-
-# вывод записей Car - по выбранной категории
-def show_categories(request, cat_slug):  # в скобках то что получаем в запросе
-    # cat__slug - обращение из модели Car - к полю slug модели Category
-    # cat_slug - значение поля slug - выбранной категории - см get_abs_url Category
-    cars = Car.objects.filter(cat__slug=cat_slug)
-    category_1 = Category.objects.get(slug=cat_slug)
-
-    paginator = Paginator(cars, 2)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'page_obj': page_obj,
-        'all_categories': all_categories,
-        'cat_selected': cat_slug,
-        'title': f'Производство: {category_1}',
-        # 'cars': cars,
-    }
-    return render(request, 'blog/home.html', context=context)
+    # полный контекст
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # получение выбранной категории - для получения параметров категории
+        select_category = Category.objects.get(slug=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(cat_selected=select_category.slug,
+                                      title=f'Производство: {select_category.name}')
+        return {**context, **c_def}
 
 
-# страница отдельной машины
-# def show_car(request, car_slug, cat_slug):
-    # car = Car.objects.get(slug=car_slug)
-    # context = {
-        # 'cat_selected': cat_slug,
-        # 'all_categories': all_categories,
-        # 'car': car,
-    # }
-    # return render(request, 'blog/car.html', context=context)
-
-
-###############################################3
+# _______________________________________________________________
 # для отображения успешности создания формы - не работает!
 # уточни позже
 # class CustomSuccessMessage:
@@ -75,11 +58,11 @@ def show_categories(request, cat_slug):  # в скобках то что пол�
 #    def form_valid(self, form):
 #        messages.success(self.request, self.success_msg)
 #        return super().form_valid(form)
-##################################################
+# _______________________________________________________________
 
 
 # страница отдельной машины
-class ShowCar(DataMixin, DetailView, FormMixin):
+class ShowCar(SuccessMessageMixin, DataMixin, DetailView, FormMixin):
     model = Car
     template_name = 'blog/car.html'
     # !указываем только car_slug - из get_absolute_ur
@@ -87,7 +70,7 @@ class ShowCar(DataMixin, DetailView, FormMixin):
     slug_url_kwarg = 'car_slug'  # !для пути 'category/<slug:cat_slug>/<slug:car_slug>/'
     # context_object_name = 'car'  # обращаемся в шаблоне {{ car.поле }} - вместо object
     form_class = CommentForm  # наша форма для комментариев
-    # success_msg = 'Комментарий создан!'  # сообщение при успешном создании комментария - РАЗБЕРИСЬ
+    success_message = "Комментарий успешно создан!"  # всплывающий комментарий {% if messages %} - {% for m in messages %}
 
     # определим перенаправление на нашу страницу, после отправки комментария, так как в пути у нас есть cat_slug, car_slug
     def get_success_url(self, **kwargs):
@@ -109,12 +92,13 @@ class ShowCar(DataMixin, DetailView, FormMixin):
             return self.form_invalid(form)  # иначе вернёт что у нас неправильно
 
     # 1
-    def form_valid(self, form):  # берём форму
+    def form_valid(self, form):  # берём форм
         self.object = form.save(commit=False)
         self.object.car_post = self.get_object()  # получение и запись экземпляра статьи (одной машины)
         self.object.author_comment = self.request.user  # получение и запись имени автора
         self.object.save()  # форма пересохраняется с новыми данными
         return super().form_valid(form)  # форма передаётся в базу данных и программа продолжит свои действия
+        get_success_message()
 
     # формируем полный контекст
     # kwargs = {'cat_slug': self.cat.slug, 'car_slug': self.slug}
@@ -125,6 +109,9 @@ class ShowCar(DataMixin, DetailView, FormMixin):
         return {**context, **c_def}  # в шаблон передаём полный контекст
 
 
+# можно сделать через класс представления CreateView
+# можно запретить не авторизованным пользователем - через класс LoginRequiredMixin
+# оставил как есть - для наглядности
 # добавление нового поста
 def show_add_post(request):
     if request.method == 'POST':  # если уже введены какие-то данные
@@ -138,6 +125,7 @@ def show_add_post(request):
     else:  # если никаких данный пользователь ещё не вводил
         form = CarAddForm()  # отображаем пустую форму для заполнения
 
+    all_categories = Category.objects.all()
     context = {
         'title': 'Добавление статьи',
         'all_categories': all_categories,
@@ -179,8 +167,6 @@ class DeletePostView(DataMixin, DeleteView):
         context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
         c_def = self.get_user_context(title='Удаление поста')  # переменная контекста DataMixin + title
         return {**context, **c_def}  # в шаблон передаём полный контекст
-
-
 
 
 

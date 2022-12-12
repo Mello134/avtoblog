@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from blog.models import *
 
 
+# форма добавления поста
 class CarAddForm(forms.ModelForm):
     class Meta:
         model = Car  # наша модель
@@ -42,7 +43,3 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'text_comment': forms.Textarea(attrs={'rows': 1}),
         }
-
-
-# 'text_comment': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
-# form-control-sm

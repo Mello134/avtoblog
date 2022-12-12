@@ -69,3 +69,12 @@ class Comment(models.Model):
     text_comment = models.TextField(verbose_name='Текст комментария')
     # статус комментария (видно/не видно)
     status_comment = models.BooleanField(verbose_name='Видимость комментария', default=True)
+
+    class Meta:
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
+        ordering = ['-time_create_comment']  # сортировка
+
+    # отображение записи по данным
+    def __str__(self):
+        return f'Авто: {self.car_post}, Коммент: {self.text_comment}'

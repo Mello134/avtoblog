@@ -8,7 +8,7 @@ class DataMixin:
     # формируем общий контекст
     def get_user_context(self, **kwargs):
         # контекст будет словарём {'ключ':'значение'}
-        context = kwargs
+        context = kwargs  # на данный момент просто пустой словарь
         # в словарь контекст добавили { 'all_categories' : Category.objects.all()}
         context['all_categories'] = all_categories
         # if 'cat_selected'
