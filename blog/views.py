@@ -101,7 +101,13 @@ class ShowCar(SuccessMessageMixin, DataMixin, DetailView, FormMixin):
 
 # поведение кнопки лайк
 # _______________________________________________________________
-# def like_button(request, cat_slug, car_slug,):
+# def like_button(request, cat_slug, car_slug):
+
+
+def comment(request, cat_slug, car_slug, com_id):
+    comment_post = Comment.objects.get(pk=com_id)
+    context = {'comment_post': comment_post}
+    return render(request, 'blog/sss.html', context=context)
 
 # _______________________________________________________________
 

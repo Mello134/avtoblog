@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CCC</title>
+</head>
+<body>
+    <h1>Комментарий с ID/PK: {{ comment_post.pk }}</h1>
+    ТЕКСТ Комментария: {{ comment_post.text_comment }}<br>
+    Автор Комментария: {{ comment_post.author_comment }}<br>
+    Название статьи, на которую сделан комментарий: {{ comment_post.car_post.title }}<br>
+    Название категории, где находится статья, на которой сделан комментарий: {{ comment_post.car_post.cat.name }}<br>
+</body>
+</html>

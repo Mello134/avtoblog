@@ -96,6 +96,10 @@
 			{% for сom_element in car.comment_car.all reversed  %}
 
 			<ul class="list-group">
+				<li>
+					<a href="{% url 'sss_path' car_slug=car.slug cat_slug=car.cat.slug com_id=сom_element.pk %}">Ссылка на каждый комментарий</a>
+				</li>
+
 				<li class="list-group-item list-group-item-info">
 
 <!--					

@@ -60,9 +60,11 @@ class Category(models.Model):
 # класс комментарии
 class Comment(models.Model):
     # отношение к определенному посту (записи в Car)
-    car_post = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name='Статья', blank=True, null=True, related_name='comment_car')
+    car_post = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name='Статья', blank=True, null=True,
+                                 related_name='comment_car')
     # автор - связь с моделью User
-    author_comment = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария', blank=True, null=True)
+    author_comment = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария', blank=True,
+                                       null=True)
     # дата создания комментария
     time_create_comment = models.DateTimeField(auto_now_add=True, verbose_name='Время создания комментария')
     # текст комментария
@@ -81,11 +83,11 @@ class Comment(models.Model):
                f'Коммент: {self.text_comment}'
 
     # функция формирования маршрута к ссылке
-    # def get_absolute_url(self):  # self - ссылка на один экземпляр(строку) таблицы модели
-    #     # получаем путь('path name=car, 'car/<slug:car_slug>/) = 127/car/supra)
-    #     return reverse('car', kwargs={'cat_slug': self.car_post.cat.slug,
-    #                                   'car_slug': self.car_post.slug,
-    #                                   'com_id': self.pk})
+    def get_absolute_url(self):  # self - ссылка на один экземпляр(строку) таблицы модели
+        # reverse('имя пути', kwargs={ Category-slug, Car-slug, Comment-slug}
+        return reverse('sss_path', kwargs={'cat_slug': self.car_post.cat.slug,
+                                           'car_slug': self.car_post.slug,
+                                           'com_id': self.pk})
 
 
 # Лайки на Комменты
@@ -94,7 +96,8 @@ class LikeComment(models.Model):
     # Связь с пользователем
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Лайкнувший пользователь')
     # Связь c определённым комментарием
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, verbose_name='Комментарий для лайка', related_name='comment_like')
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, verbose_name='Комментарий для лайка',
+                                related_name='comment_like')
 
     class Meta:
         verbose_name = "Лайк комментария"
