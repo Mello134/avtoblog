@@ -73,8 +73,34 @@ class Comment(models.Model):
     class Meta:
         verbose_name = "Комментарий"
         verbose_name_plural = "Комментарии"
-        ordering = ['-time_create_comment']  # сортировка
+        ordering = ['time_create_comment']  # сортировка
 
     # отображение записи по данным
     def __str__(self):
-        return f'Авто: {self.car_post}, Коммент: {self.text_comment}'
+        return f'Авто: {self.car_post}, ' \
+               f'Коммент: {self.text_comment}'
+
+    # функция формирования маршрута к ссылке
+    # def get_absolute_url(self):  # self - ссылка на один экземпляр(строку) таблицы модели
+    #     # получаем путь('path name=car, 'car/<slug:car_slug>/) = 127/car/supra)
+    #     return reverse('car', kwargs={'cat_slug': self.car_post.cat.slug,
+    #                                   'car_slug': self.car_post.slug,
+    #                                   'com_id': self.pk})
+
+
+# Лайки на Комменты
+# Буду считать количество LikeComment.objects.filter(comment=comment.pk)
+class LikeComment(models.Model):
+    # Связь с пользователем
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Лайкнувший пользователь')
+    # Связь c определённым комментарием
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, verbose_name='Комментарий для лайка', related_name='comment_like')
+
+    class Meta:
+        verbose_name = "Лайк комментария"
+        verbose_name_plural = "Лайки комментария"
+        # db_table = 'LikeComment'  # для названия таблицы в DB
+
+    def __str__(self):
+        return f'ЛАЙК_К - {self.comment},' \
+               f'Пользователь: {self.user}.'

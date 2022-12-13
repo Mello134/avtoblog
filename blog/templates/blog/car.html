@@ -68,6 +68,7 @@
 				Добавить комментарий
 			</button><br><br>
 
+			<!-- Всплывающий комментарий -->
 			<div class="bg-success">
 				{% if messages %}
 					{% for m in messages %}
@@ -95,7 +96,34 @@
 			{% for сom_element in car.comment_car.all reversed  %}
 
 			<ul class="list-group">
-				<li class="list-group-item list-group-item-info">Автор комментария: {{ сom_element.author_comment }}</li>
+				<li class="list-group-item list-group-item-info">
+
+<!--					
+car.comment_car.all = Записи Сomment-ForeingKey-Car (related_name=comment_car)
+&lt;QuerySet>
+то есть все записи Comment связанные к определённой записи Car
+
+
+сom_element - это одна запись (1 комментарий)
+
+
+сom_element.comment_like.all = Запись LikeComment-ForeignKey-Comment (related_name=comment_car)
+&lt;QuerySet>
+то есть все записи относящиеся к определённому комментарию
+В нашем случае одна запись это 1 лайк
+
+...|length }} - длина QuerySeta - то есть количество записей!
+-->
+					<!-- если количество лайков больше 0 -->
+					{% if сom_element.comment_like.all|length > 0 %}
+
+					Количество лайков {{ сom_element.comment_like.all|length }}
+
+					{% endif %}
+					<br>
+					Автор комментария: {{ сom_element.author_comment }}
+					
+				</li>
 				<li class="list-group-item list-group-item-light">{{ сom_element.text_comment|linebreaks }}</li>
 				<li class="list-group-item list-group-item-secondary">Дата создания: {{ сom_element.time_create_comment }}</li>
 			</ul>

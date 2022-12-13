@@ -48,16 +48,7 @@ class CarsCategoryShow(DataMixin, ListView):
 
 
 # _______________________________________________________________
-# для отображения успешности создания формы - не работает!
-# уточни позже
-# class CustomSuccessMessage:
-#    @property
-#    def success_msg(self):
-#        return False
-#
-#    def form_valid(self, form):
-#        messages.success(self.request, self.success_msg)
-#        return super().form_valid(form)
+
 # _______________________________________________________________
 
 
@@ -98,7 +89,6 @@ class ShowCar(SuccessMessageMixin, DataMixin, DetailView, FormMixin):
         self.object.author_comment = self.request.user  # получение и запись имени автора
         self.object.save()  # форма пересохраняется с новыми данными
         return super().form_valid(form)  # форма передаётся в базу данных и программа продолжит свои действия
-        get_success_message()
 
     # формируем полный контекст
     # kwargs = {'cat_slug': self.cat.slug, 'car_slug': self.slug}
@@ -107,6 +97,15 @@ class ShowCar(SuccessMessageMixin, DataMixin, DetailView, FormMixin):
         context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
         c_def = self.get_user_context(cat_selected=self.kwargs['cat_slug'])
         return {**context, **c_def}  # в шаблон передаём полный контекст
+
+
+# поведение кнопки лайк
+# _______________________________________________________________
+# def like_button(request, cat_slug, car_slug,):
+
+# _______________________________________________________________
+
+
 
 
 # можно сделать через класс представления CreateView

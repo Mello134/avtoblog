@@ -37,3 +37,4 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Car, CarAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Comment)
+admin.site.register(LikeComment)
