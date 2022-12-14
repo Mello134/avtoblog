@@ -9,11 +9,12 @@ class CarAddForm(forms.ModelForm):
     class Meta:
         model = Car  # наша модель
         # поля отображаемые в форме
-        fields = ['title', 'slug', 'content', 'tth', 'photo', 'cat']
+        fields = ['slug', 'title', 'content', 'tth', 'photo', 'cat']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-input'}),
-            'content': forms.Textarea(attrs={'cols': 60, 'rows': 6}),
-            'tth': forms.Textarea(attrs={'cols': 60, 'rows': 3}),
+            'slug': forms.TextInput(attrs={'class': 'form-control, col-5'}),
+            'title': forms.TextInput(attrs={'class': 'form-control, col-10'}),
+            'content': forms.Textarea(attrs={'rows': 6, 'class': 'form-control, col-10'}),
+            'tth': forms.Textarea(attrs={'rows': 4, 'class': 'form-control, col-10'}),
         }
 
 
@@ -28,9 +29,9 @@ class CarUpdateForm(forms.ModelForm):
         # c photo не всё так просто, коряво + обязательно необходимо изменить изображение
         fields = ['title', 'content', 'tth', 'cat', 'photo']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-input'}),
-            'content': forms.Textarea(attrs={'cols': 60, 'rows': 6}),
-            'tth': forms.Textarea(attrs={'cols': 60, 'rows': 3}),
+            'title': forms.TextInput(attrs={'class': 'form-control, col-12'}),
+            'content': forms.Textarea(attrs={'rows': 15, 'class': 'form-control, col-12'}),
+            'tth': forms.Textarea(attrs={'rows': 10, 'class': 'form-control, col-12'}),
         }
 
 
@@ -41,5 +42,5 @@ class CommentForm(forms.ModelForm):
         # поля отображаемые в форме
         fields = ['text_comment']
         widgets = {
-            'text_comment': forms.Textarea(attrs={'rows': 1}),
+            'text_comment': forms.Textarea(attrs={'rows': 1, 'class': 'form-control'}),
         }

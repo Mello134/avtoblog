@@ -85,9 +85,9 @@ class Comment(models.Model):
     # функция формирования маршрута к ссылке
     def get_absolute_url(self):  # self - ссылка на один экземпляр(строку) таблицы модели
         # reverse('имя пути', kwargs={ Category-slug, Car-slug, Comment-slug}
-        return reverse('sss_path', kwargs={'cat_slug': self.car_post.cat.slug,
-                                           'car_slug': self.car_post.slug,
-                                           'com_id': self.pk})
+        return reverse('like_button_comment', kwargs={'cat_slug': self.car_post.cat.slug,
+                                                      'car_slug': self.car_post.slug,
+                                                      'com_id': self.pk})
 
 
 # Лайки на Комменты

@@ -18,135 +18,172 @@
 
 <div class="container-fluid" >
 	<div class="row">
-		<div class="col-6">
+
+		<div class="col-9">
 			{% if car.photo %}
 			<img src="{{ car.photo.url }}" class="img-fluid"><br>
 			{% endif %}
 			<a href="{{ car.cat.get_absolute_url }}" class="nav-link active">
 				<p>Производство: {{ car.cat }}</p>
 			</a>
-
-
-
-			<ul class="list-group">
-				<li class="list-group-item list-group-item-primary">
-					<h3>Автор статьи: {{ car.author }}</h3>
-				</li>
-				<li class="list-group-item list-group-item-secondary">Время обновления поста: {{ car.time_update }}</li>
-			</ul><br>
-
-
-			{% if car.author == request.user or request.user.id == 1 %}
-
-			<a class="btn btn-warning" href="{% url 'update_post' car_slug=car.slug cat_slug=car.cat.slug %}">Редактировать статью</a>
-			<a class="btn btn-danger" href="{% url 'delete_post' car_slug=car.slug cat_slug=car.cat.slug %}">Удалить статью</a>
-
-			{% else %}
-
-			<p class="text-info">Вы не можете редактировать эту статью</p>
-			
-			{% endif %}
-
-
-			<!-- Комментарии -->
-			<br><br><br><br>
-			<h3 class="text_desc">Комментарии к посту</h3>
-			<hr>
-
-
-			<p>Комментарии: {{ car.comment_car.all.count }}</p>
-
-			{% if request.user.is_authenticated %}
-			
-			<form action="" method="post" id="add_comment" enctype="multipart/form-data">
-			{% csrf_token %}
-			<div class="col-6">{{ form.as_p }}</div>
-			</form>
-			
-		
-			<button form="add_comment" type="submit" class="btn btn-primary btn-md">
-				Добавить комментарий
-			</button><br><br>
-
-			<!-- Всплывающий комментарий -->
-			<div class="bg-success">
-				{% if messages %}
-					{% for m in messages %}
-						<h3>{{ m }}</h3>
-					{% endfor %}
-			{% endif %}
-			</div>
-
-
-			{% else %}
-
-			<p class="text-white">Только авторизованные пользоваетли могут оставлять комментарии,  
-			<a class="link-warning" href="{% url 'register' %}">проидите регистрацию</a>
-			или 
-			<a class="link-info" href="{% url 'login' %}">войдите в свой аккаунт</a></p>
-
-
-
-			{% endif %}
-
-
-			<!-- Обращение к комментарию из объекта с помощью related_name='comment_car'
-			из class Comment(models.Model): - car_post -->
-			<!-- <p>{{ car.comment_car.all }}</p> -->
-			{% for сom_element in car.comment_car.all reversed  %}
-
-			<ul class="list-group">
-				<li>
-					<a href="{% url 'sss_path' car_slug=car.slug cat_slug=car.cat.slug com_id=сom_element.pk %}">Ссылка на каждый комментарий</a>
-				</li>
-
-				<li class="list-group-item list-group-item-info">
-
-<!--					
-car.comment_car.all = Записи Сomment-ForeingKey-Car (related_name=comment_car)
-&lt;QuerySet>
-то есть все записи Comment связанные к определённой записи Car
-
-
-сom_element - это одна запись (1 комментарий)
-
-
-сom_element.comment_like.all = Запись LikeComment-ForeignKey-Comment (related_name=comment_car)
-&lt;QuerySet>
-то есть все записи относящиеся к определённому комментарию
-В нашем случае одна запись это 1 лайк
-
-...|length }} - длина QuerySeta - то есть количество записей!
--->
-					<!-- если количество лайков больше 0 -->
-					{% if сom_element.comment_like.all|length > 0 %}
-
-					Количество лайков {{ сom_element.comment_like.all|length }}
-
-					{% endif %}
-					<br>
-					Автор комментария: {{ сom_element.author_comment }}
-					
-				</li>
-				<li class="list-group-item list-group-item-light">{{ сom_element.text_comment|linebreaks }}</li>
-				<li class="list-group-item list-group-item-secondary">Дата создания: {{ сom_element.time_create_comment }}</li>
-			</ul>
-
-			<br><br>
-
-
-			{% endfor %}
-
-
-		</div>
-		<div class="col-6">
 			<h3 class="text_desc">Описание модели</h3>
 			<hr>
 			<p>{{ car.content|linebreaks }}</p><br>
 			<h3 class="text_desc">Технические характеристики</h3>
 			<hr>
 			<p>{{ car.tth|linebreaks}}</p><br>
-		</div>		
+		</div>
+
+
+
+
+
+
+		<div class="col-3">
+
+
+			Время обновления поста: {{ car.time_update }}
+
+			<ul class="list-group">
+				<li class="list-group-item list-group-item bg-dark bg-gradient text-white">
+					<h3>Автор статьи: {{ car.author }}</h3>
+				</li>
+			</ul>
+			
+
+			<!-- если автор статьи или администатор -->
+			{% if car.author == request.user or request.user.id == 1 %}
+
+
+			<h1>
+			<!-- Редактировать статью -->
+			<a class="btn btn-outline-warning btn-lg" href="{% url 'update_post' car_slug=car.slug cat_slug=car.cat.slug %}">
+				<span class="material-symbols-rounded">edit</span>
+			</a>
+			<!-- Удалить статью -->
+			<a class="btn btn-outline-danger btn-lg" href="{% url 'delete_post' car_slug=car.slug cat_slug=car.cat.slug %}">
+				<span class="material-symbols-rounded">delete</span>
+			</a>
+			</h1>
+
+			{% else %}<!-- не автор статьи и не администатор -->
+
+			<p class="text-info">Вы не можете редактировать эту статью</p>
+			
+			{% endif %}<!-- если автор статьи или администатор -->
+
+
+			<!-- Комментарии -->
+			<br><br>
+			<h3 class="text_desc">Комментарии к посту</h3>
+			<hr>
+
+
+			<p>Комментарии: {{ car.comment_car.all.count }}</p>
+
+			<!-- если залогинен -->
+			{% if request.user.is_authenticated %}
+			
+			<form action="" method="post" id="add_comment" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="col-12" >{{ form.as_p }}</div>
+			</form>
+				
+			
+			<button form="add_comment" type="submit" class="btn btn-outline-info btn-md">
+				Добавить комментарий
+			</button><br><br>
+
+
+			{% else %}<!-- не залогинен -->
+
+			<p class="text-white">Только авторизованные пользоваетли могут видеть и оставлять комментарии. Пожалуйста войдите в ствой аккаунт или зарегистрируйтесь.</p>
+
+			<a class="btn btn-outline-info btn-lg" href="{% url 'login' %}">Войти</a>
+			<a class="btn btn-outline-warning btn-lg" href="{% url 'register' %}">Зарегистрироваться</a>
+			
+
+			{% endif %}<!-- если залогинен -->
+
+
+
+
+
+			<!-- Всплывающее сообщение -->
+			{% if messages %}
+			<ul class="list-group">
+				<li class="list-group-item list-group-item-success">
+				{% for m in messages %}
+					{{ m }}
+				{% endfor %}
+				</li>
+			</ul>
+			{% endif %}	
+
+			<!-- Обращение к комментарию из объекта с помощью related_name='comment_car'
+			из class Comment(models.Model): - car_post -->
+			<!-- <p>{{ car.comment_car.all }}</p> -->
+
+			<!-- ПЕРЕБИРАЮ ВСЕ КОММЕНТАРИИ К ПОСТУ	 -->
+			{% for сom_element in car.comment_car.all reversed  %}
+
+			{% if request.user.is_authenticated %} <!-- если залогинен -->
+
+			<ul class="list-group"><!--  начало списка (1 комментарий) -->
+				<li class="list-group-item list-group-item bg-secondary bg-gradient text-white">
+
+					<div class="d-flex bd-highlight mb-0">
+						<div class="p-0 bd-highlight" style="font-size: 1.5em">{{ сom_element.author_comment }}</div>
+
+
+						<div class="p-0 bd-highlight ms-auto">
+
+							<!-- перебираю все LikeComment записи (все лайки к коменту) -->
+							{% for user_likes in сom_element.comment_like.all %}
+																
+							<!-- ЕСЛИ ПОСТАВИЛ ЛАЙК -->
+							{% if request.user == user_likes.user %}						&#9989;
+							{% endif %}<!-- ЕСЛИ ПОСТАВИЛ ЛАЙК -->
+
+							
+							{% endfor %}<!-- перебираю все лайки к коменту-->
+							
+							
+							<!-- ЛАЙК КНОПКА -->
+							<a class="btn" href="{{ сom_element.get_absolute_url }}">
+								<span class="material-symbols-rounded">thumb_up</span>
+							</a>
+							
+							<!-- кнопка на будущее , вместо галочки рядом со сделанным лайком -->
+							<!-- <a class="btn" href="{{ сom_element.get_absolute_url }}">
+								<span class="material-symbols-outlined">thumb_up</span>
+							</a>-->						
+
+							<!-- если количество лайков больше 0 - ПОКАЖУ КОЛИЧЕСТВО -->
+							{% if сom_element.comment_like.all|length > 0 %}
+							<span style="font-size: 1.2em" class="text-white">  {{ сom_element.comment_like.all|length }} </span>
+							{% endif %} <!-- если количество лайков больше 0 -->
+
+						</div>
+					</div>
+				</li>
+
+				<!-- ТЕКСТ КОММЕНТАРИЯ -->
+				<li class="list-group-item list-group-item-light">{{ сom_element.text_comment|linebreaks }}</li>
+				<!-- ДАТА КОММЕРИЯ -->
+				<li class="list-group-item list-group-item-secondary">{{ сom_element.time_create_comment }}</li>
+			
+			</ul> 
+
+			<br><br>
+
+			{% endif %} <!-- если  залогинен -->
+
+
+			{% endfor %}<!-- ПЕРЕБИРАЮ ВСЕ КОММЕНТАРИИ К ПОСТУ	 -->
+
+
+		</div>	
 	</div>
 </div>
 
