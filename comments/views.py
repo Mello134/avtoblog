@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from comments.models import Comment, LikeComment
@@ -25,4 +26,20 @@ def like_button_comment(request, cat_slug, car_slug, com_id):
         like_comment.save()  # сохраняем лайк (запись LikeComment) в БД
         # messages.info(request, f'Вам понравился комментарий от пользователя - {author_comment}')
     # остаёмся на странице поста, через запятую все динамические параметры (получали с request)
+    return redirect('car', cat_slug, car_slug)
+
+
+# кнопка удаления комментария
+def delete_button_comment(request, cat_slug, car_slug, com_id):
+    # получаю 1 комментарий (по id коммента)
+    comment = get_object_or_404(Comment, pk=com_id)
+    # если пользователь автор коммента или админ (id 1)
+    if request.user.id == comment.author_comment.id or request.user.id == 1:
+        # Удаляем комментарий
+        comment.delete()
+    else:  # если не автор и не админ
+        # Вывожу сообщение
+        messages.warning(request, 'Вы не можете удалить не свой комментарий')
+    # перенаправляюсь на страницу поста
+    # обязательно указать динамические параметры
     return redirect('car', cat_slug, car_slug)

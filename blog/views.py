@@ -4,6 +4,7 @@ from django.urls import reverse_lazy  # перенаправление
 from django.views.generic import UpdateView, DeleteView, DetailView, ListView
 from django.views.generic.edit import FormMixin
 
+from comments.models import Comment
 from .forms import CarAddForm, CarUpdateForm  # наши формы forms.py (blog app)
 from comments.forms import CommentForm  # наши формы forms.py (comments app)
 from .models import *

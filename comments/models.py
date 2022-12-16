@@ -36,6 +36,7 @@ class Comment(models.Model):
                                                       'car_slug': self.car_post.slug,
                                                       'com_id': self.pk})
 
+
 # Лайки на Комменты
 # Буду считать количество LikeComment.objects.filter(comment=comment.pk)
 class LikeComment(models.Model):

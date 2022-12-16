@@ -10,6 +10,11 @@
 
 
 
+
+
+
+
+
 <h1 class="text_shadow">{{ car.title }}</h1>
 <hr>
 <br>
@@ -125,7 +130,7 @@
 			<!-- <p>{{ car.comment_car.all }}</p> -->
 
 			<!-- ПЕРЕБИРАЮ ВСЕ КОММЕНТАРИИ К ПОСТУ	 -->
-			{% for сom_element in car.comment_car.all reversed  %}
+			{% for one_coment in car.comment_car.all reversed  %}
 
 			{% if request.user.is_authenticated %} <!-- если залогинен -->
 
@@ -133,35 +138,41 @@
 				<li class="list-group-item list-group-item bg-secondary bg-gradient text-white">
 
 					<div class="d-flex bd-highlight mb-0">
-						<div class="p-0 bd-highlight" style="font-size: 1.5em">{{ сom_element.author_comment }}</div>
+						<div class="p-0 bd-highlight" style="font-size: 1.5em">{{ one_coment.author_comment }}</div>
 
 
 						<div class="p-0 bd-highlight ms-auto">
 
 							<!-- перебираю все LikeComment записи (все лайки к коменту) -->
-							{% for user_likes in сom_element.comment_like.all %}
+							
+							{% for user_likes in one_coment.comment_like.all %}
 																
 							<!-- ЕСЛИ ПОСТАВИЛ ЛАЙК -->
-							{% if request.user == user_likes.user %}						&#9989;
+							{% if request.user == user_likes.user %}
+							&#9989;
+
+
+
+
+
 							{% endif %}<!-- ЕСЛИ ПОСТАВИЛ ЛАЙК -->
 
-							
 							{% endfor %}<!-- перебираю все лайки к коменту-->
-							
+
 							
 							<!-- ЛАЙК КНОПКА -->
-							<a class="btn" href="{{ сom_element.get_absolute_url }}">
+							<a class="btn" href="{{ one_coment.get_absolute_url }}">
 								<span class="material-symbols-rounded">thumb_up</span>
 							</a>
 							
 							<!-- кнопка на будущее , вместо галочки рядом со сделанным лайком -->
-							<!-- <a class="btn" href="{{ сom_element.get_absolute_url }}">
+							<!-- <a class="btn" href="{{ one_coment.get_absolute_url }}">
 								<span class="material-symbols-outlined">thumb_up</span>
 							</a>-->						
 
 							<!-- если количество лайков больше 0 - ПОКАЖУ КОЛИЧЕСТВО -->
-							{% if сom_element.comment_like.all|length > 0 %}
-							<span style="font-size: 1.2em" class="text-white">  {{ сom_element.comment_like.all|length }} </span>
+							{% if one_coment.comment_like.all|length > 0 %}
+							<span style="font-size: 1.2em" class="text-white">  {{ one_coment.comment_like.all|length }} </span>
 							{% endif %} <!-- если количество лайков больше 0 -->
 
 						</div>
@@ -169,10 +180,29 @@
 				</li>
 
 				<!-- ТЕКСТ КОММЕНТАРИЯ -->
-				<li class="list-group-item list-group-item-light">{{ сom_element.text_comment|linebreaks }}</li>
+				<li class="list-group-item list-group-item-light">{{ one_coment.text_comment|linebreaks }}</li>
 				<!-- ДАТА КОММЕРИЯ -->
-				<li class="list-group-item list-group-item-secondary">{{ сom_element.time_create_comment }}</li>
-			
+				<li class="list-group-item list-group-item-secondary">{{ one_coment.time_create_comment }}</li>
+
+
+
+				<!-- Если пользователь автор коммента или админ (id 1) -->
+				{% if request.user.id == one_coment.author_comment.id or request.user.id == 1 %}
+
+				<!-- КНОПКА УДАЛЕНИЕ КОММЕНТАРИЯ -->
+				<li class="list-group-item list-group-item-secondary">
+					<a href="{% url 'delete_comment' car_slug=car.slug cat_slug=car.cat.slug com_id=one_coment.pk %}" class="btn btn-outline-danger btn-sm">
+						Удалить комментарий
+					</a>
+				</li>
+
+				{% endif %}<!-- Если пользователь автор коммента или админ (id 1) -->
+
+
+
+
+
+
 			</ul> 
 
 			<br><br>
