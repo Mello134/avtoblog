@@ -1,13 +1,11 @@
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy  # перенаправление
 from django.views.generic import UpdateView, DeleteView, DetailView, ListView
 from django.views.generic.edit import FormMixin
 
-from .forms import CarAddForm, CarUpdateForm, CommentForm  # наши формы forms.py
+from .forms import CarAddForm, CarUpdateForm  # наши формы forms.py (blog app)
+from comments.forms import CommentForm  # наши формы forms.py (comments app)
 from .models import *
 from .utils import DataMixin
 
@@ -47,11 +45,6 @@ class CarsCategoryShow(DataMixin, ListView):
         c_def = self.get_user_context(cat_selected=select_category.slug,
                                       title=f'Производство: {select_category.name}')
         return {**context, **c_def}
-
-
-# _______________________________________________________________
-
-# _______________________________________________________________
 
 
 # страница отдельной машины
@@ -99,34 +92,6 @@ class ShowCar(SuccessMessageMixin, DataMixin, DetailView, FormMixin):
         context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
         c_def = self.get_user_context(cat_selected=self.kwargs['cat_slug'])
         return {**context, **c_def}  # в шаблон передаём полный контекст
-
-
-# поведение кнопки лайк
-@login_required
-def like_button_comment(request, cat_slug, car_slug, com_id):
-    # или 404 или Comment.objects.get(pk=com_id)
-    # comment - жто поле модели LikeComment-> ForeingKey -> Сomment
-    comment = get_object_or_404(Comment, pk=com_id)
-    # author_comment = comment.author_comment  # только для вывода во всплывающем сообщении
-
-    # получаем или создаём запись в модели LikeComment (то есть лайк)
-    like_comment, created = LikeComment.objects.get_or_create(
-        comment=comment,
-        user=request.user
-    )
-
-    # если запись не создалась (т.е она уже была)
-    if not created:
-        like_comment.delete()
-        # messages.info(request, f"Вам больше не нравится комментарий от пользователя - {author_comment}")
-    else:  # если запись добавилась - (лайкнули)
-        like_comment.save()  # сохраняем лайк (запись LikeComment) в БД
-        # messages.info(request, f'Вам понравился комментарий от пользователя - {author_comment}')
-    # остаёмся на странице поста, через запятую все динамические параметры (получали с реквестом)
-    return redirect('car', cat_slug, car_slug)
-
-
-# _______________________________________________________________
 
 
 # можно сделать через класс представления CreateView

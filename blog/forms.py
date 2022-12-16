@@ -1,6 +1,4 @@
 from django import forms
-from django.contrib.auth.models import User
-
 from blog.models import *
 
 
@@ -34,13 +32,3 @@ class CarUpdateForm(forms.ModelForm):
             'tth': forms.Textarea(attrs={'rows': 10, 'class': 'form-control, col-12'}),
         }
 
-
-# форма для комментария
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment  # наша модель
-        # поля отображаемые в форме
-        fields = ['text_comment']
-        widgets = {
-            'text_comment': forms.Textarea(attrs={'rows': 1, 'class': 'form-control'}),
-        }

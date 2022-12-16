@@ -33,12 +33,6 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)  # ЗАПЯТАЯ В КОНЦЕ- при одном поле
 
 
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'car_post', 'author_comment', 'text_comment')
-
-
 # Register your models here.
 admin.site.register(Car, CarAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(Comment, CommentAdmin)
-admin.site.register(LikeComment)

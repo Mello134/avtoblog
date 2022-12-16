@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',  # наше приложение blog
     'account.apps.AccountConfig',  # наше приложение account
+    'comments.apps.CommentsConfig',  # наше приложение comments
 
 ]
 
