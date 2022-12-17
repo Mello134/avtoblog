@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',  # наше приложение blog
     'account.apps.AccountConfig',  # наше приложение account
     'comments.apps.CommentsConfig',  # наше приложение comments
+    'relatepost.apps.RelatepostConfig'  # наше приложение relatepost
 
 ]
 

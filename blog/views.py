@@ -4,7 +4,8 @@ from django.urls import reverse_lazy  # перенаправление
 from django.views.generic import UpdateView, DeleteView, DetailView, ListView
 from django.views.generic.edit import FormMixin
 
-from comments.models import Comment
+
+from relatepost.models import UserCarRelation
 from .forms import CarAddForm, CarUpdateForm  # наши формы forms.py (blog app)
 from comments.forms import CommentForm  # наши формы forms.py (comments app)
 from .models import *
@@ -86,12 +87,46 @@ class ShowCar(SuccessMessageMixin, DataMixin, DetailView, FormMixin):
         self.object.save()  # форма пересохраняется с новыми данными
         return super().form_valid(form)  # форма передаётся в базу данных и программа продолжит свои действия
 
+    # метод получения рейтинга поста
+    def get_rating(self, **kwargs):
+        # получение всех записей, отношений к данному посту
+        users_ralations = UserCarRelation.objects.filter(car_relation__slug=self.kwargs['car_slug'])
+        sum_rate = 0  # промежуточная переменная - сумма всех рейтингов
+        # если количество записей отношений больше нуля 0
+        if users_ralations.count() > 0:
+            # перебираем все записи отношений
+            for one_relation in users_ralations:
+                # в промежуточную переменную прибавляем рейтинг отдельной записи
+                sum_rate += one_relation.rate
+            # полную сумму оценок делим на количество оценок и получаем рейтинг
+            rating = sum_rate / users_ralations.count()
+        else:
+            rating = 0
+        return rating
+
+    # Личная оценка пользователя
+    def get_my_rel(self, **kwargs):
+        # пробуем получить объект (запись по реакции нашего пользователя)
+        # по конкретной статье и конкретному пользователю
+        try:
+            # если объект найдём - реакция пользователя = этот объект
+            my_rel = UserCarRelation.objects.get(user_relation__pk=self.request.user.pk,
+                                                 car_relation__slug=self.kwargs['car_slug'])
+
+        except UserCarRelation.DoesNotExist:  # если объекта не существует
+            my_rel = 0  # реакции пользователя = 0
+        # возвращаем реакции конкретного пользователя если
+        return my_rel
+
     # формируем полный контекст
     # kwargs = {'cat_slug': self.cat.slug, 'car_slug': self.slug}
     # kwargs (пример из одного поста) = {'cat_slug': 'italy', 'car_slug': 'ferrari-488-gtb'}
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
-        c_def = self.get_user_context(cat_selected=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(cat_selected=self.kwargs['cat_slug'],
+                                      rating=self.get_rating(),  # получаю рейтинг
+                                      my_rel=self.get_my_rel())  # получаю реакции
+
         return {**context, **c_def}  # в шаблон передаём полный контекст
 
 

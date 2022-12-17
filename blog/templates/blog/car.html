@@ -10,11 +10,71 @@
 
 
 
+{% if rating > 0 %}
+<h5>Рейтинг статьи: {{ rating }}  - из 5.</h5>
+<hr>
+{% endif %}
+
+{% if request.user.is_authenticated %} <!-- если залогинен -->
+
+	<!--  если уже как то реагировал на статью -->
+	{% if my_rel != 0 %}
+
+	<p>Лайк = {{ my_rel.is_like_post }} /
+	Закладки = {{ my_rel.is_bookmarks_post }} /
+	Личный рейтинг = {{ my_rel.rate }}</p>
+	<hr><br><br>
+
+	<a href="#" class="btn btn-outline-info btn-lg">[Заглушка] - добавь форму и маршрут для изменения оценки статьи - от 1 до 5</a>
+	<br><br>
+
+	<!-- если лайк стоит -->
+	{% if my_rel.is_like_post == True %}
+	<a href="#" class="btn btn-outline-info btn-lg">[Заглушка] - Кнопка и маршрут убрать лайк</a>
+	<br><br>
+	{% else %}<!-- если лайк не стоит -->
+	<a href="#" class="btn btn-outline-info btn-lg">[Заглушка] - Кнопка и маршрут поставить лайк</a>
+	<br><br>
+	{% endif %}<!-- если лайк стоит -->
+
+	<!-- если в закладнах -->
+	{% if my_rel.is_bookmarks_post == True %}
+	<a href="#" class="btn btn-outline-info btn-lg">[Заглушка] - Галочка стоит - маршут убрать закладку</a>
+	<br><br>
+	{% else %}<!-- если не в закладнах -->
+	<a href="#" class="btn btn-outline-info btn-lg">[Заглушка] - Галочка не стоит - маршут добавить закладку</a>
+	<br><br>
+	{% endif %}<!-- если в закладнах -->
 
 
 
 
 
+	{% else %}<!-- если не реагировали -->
+
+	<h4 class="text-info">Вы ещё не реагировали на данную статью.</h4>
+	<a href="#" class="btn btn-outline-warning btn-lg">[Заглушка] - добавь форму и маршрут оценки статью - от 1 до 5</a>
+	<br><br>
+	<a href="#" class="btn btn-outline-warning btn-lg">[Заглушка] - добавь кнопку и маршрут - неактивную для лайка</a>
+	<br>
+	<br>
+	<a href="#" class="btn btn-outline-warning btn-lg">[Заглушка] - добавь кнопку/галочку и маршрут - неактивную для закладки</a>
+
+
+
+
+	{% endif %}<!--  если уже как то реагировал на статью -->
+
+{% else %}
+
+<h4 class="text-light">Только авторизованные пользователи могут реагировать на статью</h4>
+<a href="#" class="btn btn-outline-info btn-lg">[заглушка] добавь кнопку войти</a>
+<a href="#" class="btn btn-outline-warning btn-lg">[заглушка] добавь кнопку регистрации</a>
+
+{% endif %} <!-- если залогинен -->
+
+
+<br><br><br>
 <h1 class="text_shadow">{{ car.title }}</h1>
 <hr>
 <br>

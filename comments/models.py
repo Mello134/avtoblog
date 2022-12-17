@@ -54,3 +54,5 @@ class LikeComment(models.Model):
     def __str__(self):
         return f'ЛАЙК_К - {self.comment},' \
                f'Пользователь: {self.user}.'
+
+
