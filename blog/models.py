@@ -20,8 +20,6 @@ class Car(models.Model):
     # автор - (связь с моделью User, при удалении автора - статья переходит админу, стандартно автором будет админ,
     # поле автор не может быть пустым)
     author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, verbose_name='Автор', default=1, blank=False)
-    # рейтинг поста (пример рейтинг = 3.68)
-    rating = models.DecimalField(max_digits=3, decimal_places=2, default=None, null=True)
 
     # с помощью метода запись нашего класса будет выводиться по её заголовку
     def __str__(self):

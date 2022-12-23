@@ -32,3 +32,4 @@ class CarUpdateForm(forms.ModelForm):
             'tth': forms.Textarea(attrs={'rows': 10, 'class': 'form-control, col-12'}),
         }
 
+
