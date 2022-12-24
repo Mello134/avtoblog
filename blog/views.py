@@ -5,7 +5,7 @@ from django.views.generic import UpdateView, DeleteView, DetailView, ListView
 from django.views.generic.edit import FormMixin, CreateView
 
 from relatepost.forms import RatingForm
-from relatepost.models import LikeMarkPost
+from relatepost.models import LikeMarkPost, Rating
 from .forms import CarAddForm, CarUpdateForm  # наши формы forms.py (blog app)
 from comments.forms import CommentForm  # наши формы forms.py (comments app)
 from .models import *
@@ -100,14 +100,53 @@ class ShowCar(SuccessMessageMixin, DataMixin, DetailView, FormMixin):
             relation = 'no'
             return relation  # возвращаем строку 'no' (для проверки в шаблоне)
 
+    # получение рейтинга поста
+    def get_rating_post(self, **kwargs):
+        # получаем все записи рейтинга к конкретному посту
+        rating_records = Rating.objects.filter(post_rate__slug=self.kwargs['car_slug'])
+        sum_rating = 0  # промежуточная переменная, сумма всех рейтингов
+        # если количество записей рейтинга больше 0
+        if rating_records.count() > 0:
+            # перебираем все записи модели Rating
+            for rec in rating_records:
+                # к переменной прибавляем рейтинг из каждой записи Rating (конкретного поста)
+                # value - потому что поле star не совсем число, и его нужно привести к числу!
+                sum_rating += rec.star.value
+            # сумма всех рейтингов / количество записей по рейтингу
+            rating = sum_rating / rating_records.count()
+            # округляем до 2-х чисел после запятой
+            rating = round(rating, 2)
+        else:  # если к посту рейтинг никто не ставил
+            rating = 0
+        return rating  # возвращаем итоговый рейтинг!
+
+    # получение количества лайков к посту
+    def get_total_likes_post(self, **kwargs):
+        # получаю все записи реакций (лайк и/или закладки) относящиеся к конкретному посту
+        likes_or_marks_records = LikeMarkPost.objects.filter(post_like_mark__slug=self.kwargs['car_slug'])
+        total_likes = 0
+        # если реакций (количество записей) лайк и/или закладки больше 0
+        if likes_or_marks_records.count() > 0:
+            # перебираем все записи
+            for rec in likes_or_marks_records:
+                # упрощено от if rec.is_like_post == True:
+                # если в записи в поле лайков стоит True
+                if rec.is_like_post:
+                    # прибавляем к результату единицу
+                    total_likes += 1
+        return total_likes  # возвращаем подсчёт лайков
+
     # формируем полный контекст
     # kwargs = {'cat_slug': self.cat.slug, 'car_slug': self.slug}
     # kwargs (пример из одного поста) = {'cat_slug': 'italy', 'car_slug': 'ferrari-488-gtb'}
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
-        context['star_form'] = RatingForm()  # добавлеем нашу форму в контекст (ключ star_form: значение=наша форма)
+        context['star_form'] = RatingForm()  # добавляем нашу форму в контекст (ключ star_form: значение=наша форма)
         c_def = self.get_user_context(cat_selected=self.kwargs['cat_slug'],  # выбор категории
-                                      relation=self.get_user_relation_to_post())  # реакции
+                                      relation=self.get_user_relation_to_post(),  # реакции
+                                      rating=self.get_rating_post(),  # рейтинг
+                                      total_likes=self.get_total_likes_post()  # количество лайков
+                                      )
         return {**context, **c_def}  # в шаблон передаём полный контекст
 
 

@@ -13,6 +13,6 @@ rating.addEventListener("change", function (e) {
         body: data
     })
     // 5. При успешном ответе - Рейтинг установлен, при отрицательном - Ошибка
-        .then(response => alert("Рейтинг установлен"))
+        .then(response => alert("Рейтинг установлен, ваш голос будет учтён после обновления страницы"))
         .catch(error => alert("Ошибка"))
 });

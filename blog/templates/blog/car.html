@@ -9,36 +9,6 @@
 {% block content %}
 
 
-
-<!-- если реакции есть -->
-{% if relation != 'no' %}
-	{% for r in relation %} <!-- перебираем поля реакций -->
-		<h3>Пользователь - {{ r.user_like_mark }}</h3>
-		<h3>Статья - {{ r.post_like_mark }}</h3>
-		<h3>Лайк - {{ r.is_like_post }}</h3>
-		<h3>Закладка - {{ r.is_bookmarks_post }}</h3>
-		<br>
-		{% if r.is_like_post == True %} <!-- если лайк стоит -->
-			<h3 class="text-info">Лайк есть</h3>
-		{% else %} <!-- если лайк не стоит -->
-			<h3 class="text-info">Нет лайка</h3>
-		{% endif %}<!-- если лайк стоит -->
-	{% endfor %} <!-- перебираем поля реакций -->
-
-{% else %} <!-- если нет реакций -->	
-	<h3 class="text-danger">Нет реакции от пользователя</h3>
-{% endif %} <!-- если реакции есть -->
-
-
-
-
-
-
-
-
-
-<hr>
-
 <h1 class="text_shadow">{{ car.title }}</h1>
 <hr>
 <br>
@@ -73,7 +43,14 @@
 				<li class="list-group-item list-group-item-secondary">
 					<div class="d-flex justify-content-between">
 						<div class="pt-2 bd-highlight">
-							<p style="font-size: 1.2em;">Рейтинг: 4.73</p>
+							<p style="font-size: 1.2em;">
+								Рейтинг: 
+								{% if rating > 0 %} <!-- если рейтинг > 0 -->
+								{{ rating }}
+								{% else %} <!-- если рейтинг 0 -->
+								нет оценок
+								{% endif %} <!-- если рейтинг > 0 -->
+							</p>
 						</div>
 
 
@@ -104,11 +81,18 @@
 	  							{% if r.is_like_post == True %} <!-- если лайк стоит -->
 		  							<a class="btn" href="{% url 'like_post' car_slug=car.slug cat_slug=car.cat.slug %}">
 										<img src="{% static 'blog/images/heart-on.png' %}" height="32" width="32" class="img-fluid">
-					    			</a>10
+					    			</a>
+					    			{% if total_likes > 0 %} <!-- если лайков больше 0 -->
+					    				{{ total_likes }}
+					    			{% endif %} <!-- если лайков больше 0 -->
+
 				    			{% else %} <!-- если лайк не стоит -->
 									<a class="btn" href="{% url 'like_post' car_slug=car.slug cat_slug=car.cat.slug %}">
 										<img src="{% static 'blog/images/heart-off.png' %}" height="32" width="32" class="img-fluid">
-									</a>9							
+									</a>
+									{% if total_likes > 0 %} <!-- если лайков больше 0 -->
+					    				{{ total_likes }}
+					    			{% endif %}	<!-- если лайков больше 0 -->						
 								{% endif %}<!-- если лайк стоит -->
 
 			    			{% endfor %} <!-- перебираем поля реакций -->
@@ -124,7 +108,10 @@
 			    			<a class="btn" href="{% url 'like_post' car_slug=car.slug cat_slug=car.cat.slug %}">
 								<img src="{% static 'blog/images/heart-off.png' %}" height="32" width="32" class="img-fluid">
 							</a>
-			    		{% endif %} <!-- если реакции есть -->
+							{% if total_likes > 0 %} <!-- если лайков больше 0 -->
+					    				{{ total_likes }}
+					    			{% endif %}	<!-- если лайков больше 0 -->
+			    			{% endif %} <!-- если реакции есть -->
 		    			</div>
 		    		</div>
 				</li>
