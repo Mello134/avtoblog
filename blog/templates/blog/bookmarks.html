@@ -1,0 +1,56 @@
+{% extends 'blog/base.html' %} 
+
+{% block title %} 
+	{{ title }}
+{% endblock %}
+
+
+{% block content %}
+
+<h1 class="text_shadow">{{ title }}</h1><br>
+
+<!-- если пользователь не нелал закладки -->
+<!-- cars = Queryset Cars.objects.all/get/filter (у нас filter) -->
+{% if cars.count == 0 %}
+	<p class="no_queryset">
+		Здесь будут храниться ваши избранные статьи
+	</p>
+	<h4 class="text-center text-info">
+		Для добааления в избранное, необходимо перейти на страницу статьи - и добавить её в закладки.
+	</h4>
+{% endif %}<!-- если пользователь не нелал закладки -->
+
+
+	<div class="container-fluid">
+		<div class="row">
+
+
+			<!-- page_obj - это Car.category.all() + пагинатор -->
+			{% for car in cars %}
+			<div class="col-xl-3">
+		 		<div class="card mb-4 bg-dark">
+		 			<a href="{{ car.get_absolute_url }}">
+		 				<img src="{{ car.photo.url }}" class="card-img-top">
+		 			</a>
+		 			<!-- <div class="card-body"> -->
+		 			<div class="card-footer">
+		 				<h4 class="card-title text_desc">
+		 					{{ car.title }}
+		 				</h4>
+		 				<p class="card-text">
+		 					{{ car.tth|truncatechars:150 }}
+		 				</p>
+
+		 				<p class="text-end">
+		 					<a href="{{ car.cat.get_absolute_url }}" class="btn btn-dark">Производство: {{ car.cat }}</a>
+		 				</p>
+		 			</div>
+		 		</div>
+		 		<br><br>
+		 	</div>
+			{% endfor %}
+
+		</div>
+	</div>	
+
+{% endblock %}

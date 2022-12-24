@@ -8,7 +8,8 @@ class LikeMarkPost(models.Model):
     # какой пользователь
     user_like_mark = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь Л-З')
     # какой пост
-    post_like_mark = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name='Пост Л-З')
+    post_like_mark = models.ForeignKey(Car, on_delete=models.CASCADE, verbose_name='Пост Л-З',
+                                       related_name='car_to_like_mark_post')
     # лайк на пост
     is_like_post = models.BooleanField(default=False, verbose_name='Лайк поста')
     # добавление в закладки

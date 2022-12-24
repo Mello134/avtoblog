@@ -142,3 +142,10 @@
 
 .rating > label:hover:before,  .rating > label:hover ~ label:before,  .rating:not(:hover) > :checked ~ label:before { opacity: 1; }
 /* //Чекбоксы ретинга - Звёзды рейтинга */
+
+.no_queryset {
+    text-align: center;
+    font-size: 25px;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+}

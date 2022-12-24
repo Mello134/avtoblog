@@ -1,7 +1,20 @@
 <div class="col-lg-2 bg-dark bg-gradient">
 	<br>
 	<ul class="nav flex-column text_side" >
-	
+
+{% if request.user.is_authenticated %} <!-- если залогинен -->		
+		{% if cat_selected != 'закладки' %} <!-- если не 'закладки' -->
+		<li class="nav-item">
+		    <a class="nav-link active pb-4" aria-current="page" href="{% url 'bookmarks' %}">Мои закладки</a>
+		</li>
+		{% else %} <!-- если 'закладки' -->
+		<li class="nav-item">
+		    <a class="nav-link disabled pb-4" href="{% url 'bookmarks' %}" tabindex="-1" aria-disabled="true">Мои закладки</a>
+		</li>
+		{% endif %}	<!-- если не 'закладки' -->
+{% endif %} <!-- если залогинен -->	
+
+
 
 	  {% if cat_selected != 'all' %}
 	  <li class="nav-item">

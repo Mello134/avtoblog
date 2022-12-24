@@ -1,8 +1,9 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy  # перенаправление
 from django.views.generic import UpdateView, DeleteView, DetailView, ListView
-from django.views.generic.edit import FormMixin, CreateView
+from django.views.generic.edit import FormMixin
 
 from relatepost.forms import RatingForm
 from relatepost.models import LikeMarkPost, Rating
@@ -46,6 +47,40 @@ class CarsCategoryShow(DataMixin, ListView):
         select_category = Category.objects.get(slug=self.kwargs['cat_slug'])
         c_def = self.get_user_context(cat_selected=select_category.slug,
                                       title=f'Производство: {select_category.name}')
+        return {**context, **c_def}
+
+
+# вывод машин избранных статей пользователя
+class CarsBookmarksShow(LoginRequiredMixin, DataMixin, ListView):
+    login_url = 'login'  # перенаправление если пользователь не авторизован (LoginRequiredMixin)
+    model = Car
+    template_name = 'blog/bookmarks.html'  # шаблон
+    context_object_name = 'cars'  # objects = cars (просто имя)
+    # allow_empty = True - покажет пустой список если ничего не будет
+    # allow_empty = False - покажет 404, при отсутствии совпадений в get_queryset
+    allow_empty = True  # для отображения 404
+
+    # параметры вывода (выводим записи только из, закладок пользователя)
+    def get_queryset(self):
+        # получаем список всех записей LikeMarkPost ао фильтру (текущий пользователь, есть закладка)
+        bookmarks_post_list = LikeMarkPost.objects.filter(user_like_mark__pk=self.request.user.pk,
+                                                          is_bookmarks_post=True)
+        pk_list_bookmarks_for_user = []  # создал пустой список pk
+        # перебираем все записи по вышеуказанной выборке
+        for one_rec in bookmarks_post_list:
+            # добавляю в наш список, id/pk записей, которые есть в закладки
+            pk_list_bookmarks_for_user.append(one_rec.post_like_mark.pk)
+        # Вывожу только записи из закладок
+        # pk - это Car.pk,  __in - необходим когда атрибутов одного поля несколько
+        # после __in - атрибуты поиска нужно выводить списком
+        # пример = Model.objects.filter(цвет__in=['белый','чёрный','синий'])
+        return Car.objects.filter(pk__in=pk_list_bookmarks_for_user)
+
+    # полный контекст
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(cat_selected='закладки',
+                                      title=f'Избранные статьи')
         return {**context, **c_def}
 
 
