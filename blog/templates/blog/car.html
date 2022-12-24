@@ -38,7 +38,6 @@
 
 
 <hr>
-<br><br><br><br><br><br><br><br>
 
 <h1 class="text_shadow">{{ car.title }}</h1>
 <hr>
@@ -50,7 +49,7 @@
 
 		<div class="col-8">
 			{% if car.photo %}
-			<img src="{{ car.photo.url }}" class="img-fluid"><br>
+			<img src="{{ car.photo.url }}" class="img-fluid rounded"><br>
 			{% endif %}
 			<a href="{{ car.cat.get_absolute_url }}" class="nav-link active">
 				<p>Производство: {{ car.cat }}</p>
@@ -66,7 +65,7 @@
 
 		<div class="col-4">
 
-			<span class="text-secondary">Обновлено: {{ car.time_update }}</span>
+
 			<ul class="list-group">
 				<li class="list-group-item list-group-item bg-dark bg-gradient text-white">
 					<h3>Автор статьи: {{ car.author }}</h3>
@@ -74,21 +73,66 @@
 				<li class="list-group-item list-group-item-secondary">
 					<div class="d-flex justify-content-between">
 						<div class="pt-2 bd-highlight">
-							<b>Общий рейтинг: 4.73</b>
+							<p style="font-size: 1.2em;">Рейтинг: 4.73</p>
 						</div>
 
+
+
+{% if request.user.is_authenticated %} <!-- если залогинен  для лайк закл и рейтинг -->	
+
 						<!-- кнопки лайк и закдадка -->
-  						<div class="p-1 bd-highlight">
-							<a class="btn btn-outline-danger btn-xl" href="#">Закладка</a>
-			    			<a class="btn btn-outline-danger btn-xl" href="#">Лайк</a>
+  						<div class="mb-0 bd-highlight">
+						
+						<!-- если реакции есть -->
+						{% if relation != 'no' %}
+
+							{% for r in relation %} <!-- перебираем поля реакций -->
+
+								<!-- закладки -->
+								{% if r.is_bookmarks_post == True %} <!-- если в закладках -->
+									<a class="btn" href="{% url 'bookmark_post' car_slug=car.slug cat_slug=car.cat.slug %}">
+										<img src="{% static 'blog/images/bookmark-on.png' %}" height="32" width="32" class="img-fluid">
+									</a>
+								{% else %} <!-- если НЕ закладках -->
+									<a class="btn" href="{% url 'bookmark_post' car_slug=car.slug cat_slug=car.cat.slug %}">
+										<img src="{% static 'blog/images/bookmark-off.png' %}" height="32" width="32" class="img-fluid">
+					    			</a>
+				    			{% endif %} <!-- если в закладках -->
+
+
+	  							<!-- лайк -->
+	  							{% if r.is_like_post == True %} <!-- если лайк стоит -->
+		  							<a class="btn" href="{% url 'like_post' car_slug=car.slug cat_slug=car.cat.slug %}">
+										<img src="{% static 'blog/images/heart-on.png' %}" height="32" width="32" class="img-fluid">
+					    			</a>10
+				    			{% else %} <!-- если лайк не стоит -->
+									<a class="btn" href="{% url 'like_post' car_slug=car.slug cat_slug=car.cat.slug %}">
+										<img src="{% static 'blog/images/heart-off.png' %}" height="32" width="32" class="img-fluid">
+									</a>9							
+								{% endif %}<!-- если лайк стоит -->
+
+			    			{% endfor %} <!-- перебираем поля реакций -->
+
+
+
+			    		{% else %} <!-- если реакций от пользователя нет -->
+			    			<!-- неактивная закладка -->
+							<a class="btn" href="{% url 'bookmark_post' car_slug=car.slug cat_slug=car.cat.slug %}">
+								<img src="{% static 'blog/images/bookmark-off.png' %}" height="32" width="32" class="img-fluid">
+			    			</a>
+			    			<!-- неактивный лайк -->
+			    			<a class="btn" href="{% url 'like_post' car_slug=car.slug cat_slug=car.cat.slug %}">
+								<img src="{% static 'blog/images/heart-off.png' %}" height="32" width="32" class="img-fluid">
+							</a>
+			    		{% endif %} <!-- если реакции есть -->
 		    			</div>
 		    		</div>
 				</li>
 
+
 				<li class="list-group-item list-group-item-success bg-gradient">
 
 					<!-- форма звёзд -->
-				    {% if request.user.is_authenticated %}
 						<form action="{% url 'add_rating' %}" method="post" name="rating">
 							<b>Оцените статью:</b>
 							{% csrf_token %}
@@ -104,14 +148,14 @@
 								{% endfor %}
 							</span>			
 						</form>
-					{% endif %}
 				</li>
+{% endif %} <!-- если залогинен  для лайк закл и рейтинг -->
 			</ul>
 			
 
 			<!-- если автор статьи или администатор -->
 			{% if car.author == request.user or request.user.id == 1 %}
-
+			<span class="text-secondary">Обновлено: {{ car.time_update }}</span>
 
 			<h1>
 			<!-- Редактировать статью -->

@@ -55,3 +55,31 @@ def like_post(request, cat_slug, car_slug):
         like_mark_post_object.save()
     return redirect('car', cat_slug, car_slug)
 
+
+# кнопка закладки
+@login_required
+def bookmark_post(request, cat_slug, car_slug):
+    try:
+        like_mark_post_object = LikeMarkPost.objects.get(user_like_mark__pk=request.user.pk,
+                                                         post_like_mark__slug=car_slug)
+        # то же самое что [if like_mark_post_object.is_bookmarks_post == False:]
+        if not like_mark_post_object.is_bookmarks_post:  # если не добавил в закладки
+            # добавляем в закладки
+            LikeMarkPost.objects.filter(user_like_mark__pk=request.user.pk,
+                                        post_like_mark__slug=car_slug).update(is_bookmarks_post=True)
+
+        else:  # если уже в закладках
+            # убираем из закладок
+            LikeMarkPost.objects.filter(user_like_mark__pk=request.user.pk,
+                                        post_like_mark__slug=car_slug).update(is_bookmarks_post=False)
+    except LikeMarkPost.DoesNotExist:  # Реакцию не нашли (объект не существует)
+        # создаём новую реакцию
+        like_mark_post_object = LikeMarkPost.objects.create(
+            user_like_mark=request.user,
+            post_like_mark=Car.objects.get(slug=car_slug),
+            is_like_post=False,
+            is_bookmarks_post=True
+        )
+        like_mark_post_object.save()
+    return redirect('car', cat_slug, car_slug)
+
