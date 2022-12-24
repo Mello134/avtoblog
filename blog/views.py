@@ -5,6 +5,7 @@ from django.views.generic import UpdateView, DeleteView, DetailView, ListView
 from django.views.generic.edit import FormMixin, CreateView
 
 from relatepost.forms import RatingForm
+from relatepost.models import LikeMarkPost
 from .forms import CarAddForm, CarUpdateForm  # наши формы forms.py (blog app)
 from comments.forms import CommentForm  # наши формы forms.py (comments app)
 from .models import *
@@ -86,13 +87,27 @@ class ShowCar(SuccessMessageMixin, DataMixin, DetailView, FormMixin):
         self.object.save()  # форма пересохраняется с новыми данными
         return super().form_valid(form)  # форма передаётся в базу данных и программа продолжит свои действия
 
+    # получение реакций пользователя к посту
+    def get_user_relation_to_post(self, **kwargs):
+        # пробуем получить реакции (лайк И ИЛИ закладки)
+        # по pk пользователя и slag статьи
+        relation = LikeMarkPost.objects.filter(user_like_mark__pk=self.request.user.pk,
+                                               post_like_mark__slug=self.kwargs['car_slug'])
+        # если количество реакций > 0
+        if relation.count() > 0:
+            return relation  # возвращаем весь QuerySet
+        else:
+            relation = 'no'
+            return relation  # возвращаем строку 'no' (для проверки в шаблоне)
+
     # формируем полный контекст
     # kwargs = {'cat_slug': self.cat.slug, 'car_slug': self.slug}
     # kwargs (пример из одного поста) = {'cat_slug': 'italy', 'car_slug': 'ferrari-488-gtb'}
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
         context['star_form'] = RatingForm()  # добавлеем нашу форму в контекст (ключ star_form: значение=наша форма)
-        c_def = self.get_user_context(cat_selected=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(cat_selected=self.kwargs['cat_slug'],  # выбор категории
+                                      relation=self.get_user_relation_to_post())  # реакции
         return {**context, **c_def}  # в шаблон передаём полный контекст
 
 
@@ -117,7 +132,7 @@ def show_add_post(request):
         'title': 'Добавление статьи',
         'all_categories': all_categories,
         'form': form,
-      }
+    }
     return render(request, 'blog/add_post.html', context=context)
 
 
@@ -154,5 +169,3 @@ class DeletePostView(DataMixin, DeleteView):
         context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
         c_def = self.get_user_context(title='Удаление поста')  # переменная контекста DataMixin + title
         return {**context, **c_def}  # в шаблон передаём полный контекст
-
-

@@ -9,6 +9,37 @@
 {% block content %}
 
 
+
+<!-- если реакции есть -->
+{% if relation != 'no' %}
+	{% for r in relation %} <!-- перебираем поля реакций -->
+		<h3>Пользователь - {{ r.user_like_mark }}</h3>
+		<h3>Статья - {{ r.post_like_mark }}</h3>
+		<h3>Лайк - {{ r.is_like_post }}</h3>
+		<h3>Закладка - {{ r.is_bookmarks_post }}</h3>
+		<br>
+		{% if r.is_like_post == True %} <!-- если лайк стоит -->
+			<h3 class="text-info">Лайк есть</h3>
+		{% else %} <!-- если лайк не стоит -->
+			<h3 class="text-info">Нет лайка</h3>
+		{% endif %}<!-- если лайк стоит -->
+	{% endfor %} <!-- перебираем поля реакций -->
+
+{% else %} <!-- если нет реакций -->	
+	<h3 class="text-danger">Нет реакции от пользователя</h3>
+{% endif %} <!-- если реакции есть -->
+
+
+
+
+
+
+
+
+
+<hr>
+<br><br><br><br><br><br><br><br>
+
 <h1 class="text_shadow">{{ car.title }}</h1>
 <hr>
 <br>
