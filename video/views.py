@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from blog.utils import DataMixin
-from video.models import VideoYT
+from video.models import VideoYouTubeRuTube
 
 
 # представление шаблона со списком видео
 class AllVideoListShow(DataMixin, ListView):
     # paginate_by = 8 пагинация на будущее
-    model = VideoYT
+    model = VideoYouTubeRuTube
     template_name = 'video/video.html'
     context_object_name = 'video'  # objects = video (для обращения в шаблоне)
 

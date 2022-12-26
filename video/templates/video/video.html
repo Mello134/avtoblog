@@ -2,7 +2,7 @@
 
 <!-- django-embed-video -->
 <!-- но и без этого работает(может быть нужно в продакшене) -->
-{% load embed_video_tags %}
+<!-- {% load embed_video_tags %} -->
 
 
 {% block title %} 
@@ -12,26 +12,26 @@
 
 {% block content %}
 <h1 class="text_shadow">{{ title }}</h1>
-<hr>
+
 
 
 <div class="container-fluid">
 	<div class="row">
 
-		<!-- video = VideoYT.objects.all() -->
+		<!-- video = VideoYouTubeRuTube.objects.all() -->
 		{% for v in video %}
-		<div class="col-xl-6 pt-5 ps-5 pe-5">
+		<div class="col-xl-6 pt-2 ps-5 pe-5">
 
 			<hr>
 			<h3>{{ v.name }}</h3>
-			<!-- <h3 class="text-info">video_url: {{v.video_url}}</h3>
-			<h3 class="text-info">video_url: {{v.video_url}}</h3> -->
 
-				Ссылка на первоисточник: <a href="{{v.video_url}}">{{v.video_url}}</a>
+				Ссылка на первоисточник:<br> <a href="{{v.video_url}}">{{v.video_url}}</a>
 
 			<div class="ratio ratio-16x9">
-				<iframe src="{{v.video_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				<!-- {{ v.safe_url }} - Это метод модели! получение ссылки разработчика -->
+				<iframe src="{{ v.safe_url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 			</div>
+			<br>
 			<h5>Отправитель: {{ v.author_video }}</h5>
 			<hr>
 		</div>
@@ -40,23 +40,11 @@
 </div><!-- container -->
 
 
-<iframe src="{{v.video_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<h1>Rutube</h1>
-<div class="ratio ratio-16x9">
-	<iframe width="720" height="405" src="https://rutube.ru/play/embed/949cdb2eb7b182b7043646b61e9b9f58" frameBorder="0" allow="clipboard-write; autoplay" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-</div>  
-
-
-<h1>Rutube в плеере Ютуба</h1>
-<div class="ratio ratio-16x9">
-	<iframe src="https://rutube.ru/play/embed/949cdb2eb7b182b7043646b61e9b9f58" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>  
 
 {% endblock %}
 
-https://rutube.ru/video/949cdb2eb7b182b7043646b61e9b9f58/ просто копия ссылки
-https://rutube.ru/play/embed/949cdb2eb7b182b7043646b61e9b9f58" - в плеере
+<!-- https://rutube.ru/video/949cdb2eb7b182b7043646b61e9b9f58/ просто копия ссылки
+https://rutube.ru/play/embed/949cdb2eb7b182b7043646b61e9b9f58" - в плеере -->
 
 
 <!-- <h1>Кус</h1>
@@ -75,3 +63,18 @@ https://rutube.ru/play/embed/949cdb2eb7b182b7043646b61e9b9f58" - в плеере
 <!-- <div class="ratio ratio-16x9">
 	<iframe src="{{v.video_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div> -->
+
+
+
+<!-- <iframe src="{{v.video_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+
+<!-- <h1>Rutube</h1>
+<div class="ratio ratio-16x9">
+	<iframe width="720" height="405" src="https://rutube.ru/play/embed/949cdb2eb7b182b7043646b61e9b9f58" frameBorder="0" allow="clipboard-write; autoplay" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+</div>  
+ -->
+
+<!-- <h1>Rutube в плеере Ютуба</h1>
+<div class="ratio ratio-16x9">
+	<iframe src="https://rutube.ru/play/embed/949cdb2eb7b182b7043646b61e9b9f58" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>  --> 

@@ -1,8 +1,8 @@
 from django.contrib import admin
-from video.models import VideoYT
+from video.models import VideoYouTubeRuTube
 
 
-class VideoYTAdmin(admin.ModelAdmin):
+class VideoYouTubeRuTubeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'author_video', 'video_url')
     # список полей - ко которым можно вести поиск
     search_fields = ('name', 'author_video')
@@ -13,4 +13,4 @@ class VideoYTAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-admin.site.register(VideoYT, VideoYTAdmin)
+admin.site.register(VideoYouTubeRuTube, VideoYouTubeRuTubeAdmin)
