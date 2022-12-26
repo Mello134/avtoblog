@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy  # перенаправление
-from django.views.generic import UpdateView, DeleteView, DetailView, ListView
+from django.views.generic import UpdateView, DeleteView, DetailView, ListView, TemplateView
 from django.views.generic.edit import FormMixin
 
 from relatepost.forms import RatingForm
@@ -243,3 +243,4 @@ class DeletePostView(DataMixin, DeleteView):
         context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
         c_def = self.get_user_context(title='Удаление поста')  # переменная контекста DataMixin + title
         return {**context, **c_def}  # в шаблон передаём полный контекст
+

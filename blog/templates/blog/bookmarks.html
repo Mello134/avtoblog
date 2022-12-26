@@ -34,19 +34,12 @@
 		 			</a>
 		 			<!-- <div class="card-body"> -->
 		 			<div class="card-footer">
-		 				<h4 class="card-title text_desc">
+		 				<h4>
 		 					{{ car.title }}
 		 				</h4>
-		 				<p class="card-text">
-		 					{{ car.tth|truncatechars:150 }}
-		 				</p>
-
-		 				<p class="text-end">
-		 					<a href="{{ car.cat.get_absolute_url }}" class="btn btn-dark">Производство: {{ car.cat }}</a>
-		 				</p>
 		 			</div>
 		 		</div>
-		 		<br><br>
+		 		<br>
 		 	</div>
 			{% endfor %}
 

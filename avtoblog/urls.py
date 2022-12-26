@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('account.urls')),  # путь к путям приложения account
     path('', include('comments.urls')),  # путь к путям приложения comments
     path('', include('relatepost.urls')),  # путь к путям приложения relatepost
+    path('video/', include('video.urls')),  # путь к путям приложения video
 ]
 
 if settings.DEBUG:

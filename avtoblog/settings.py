@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'embed_video',  # django-embed-video
     'blog.apps.BlogConfig',  # наше приложение blog
     'account.apps.AccountConfig',  # наше приложение account
     'comments.apps.CommentsConfig',  # наше приложение comments
-    'relatepost.apps.RelatepostConfig'  # наше приложение relatepost
+    'relatepost.apps.RelatepostConfig',  # наше приложение relatepost
+    'video.apps.VideoConfig',  # наше приложение video
 
 ]
 
@@ -73,6 +75,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'avtoblog.wsgi.application'
+
+# Нужно в продакшене при использовании - django-embed-video
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# !!! В настройках Nginx в продакшене, при использовании - django-embed-video, необходимо добавить:
+# proxy_set_header X-Forwarded-Proto $scheme;
 
 
 # Database
