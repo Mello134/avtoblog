@@ -1,0 +1,52 @@
+<div class="col-lg-2 bg-dark bg-gradient">
+	<br>
+	<ul class="nav flex-column text_side" >
+
+
+		<li class="nav-item">
+			<a class="nav-link active" aria-current="page" href="#">Все видео</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Все видео</a>
+		</li>
+
+
+
+
+
+{% if request.user.is_authenticated %} <!-- если залогинен -->
+
+		<li class="nav-item">
+		    <a class="nav-link active" aria-current="page" href="#">Мои видео</a>
+		</li>
+
+		<li class="nav-item">
+		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Мои видео</a>
+		</li>		
+
+		<li class="nav-item">
+		    <a class="nav-link active" aria-current="page" href="#">Добавленные видео</a>
+		</li>
+
+		<li class="nav-item">
+		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Добавленные видео</a>
+		</li>
+
+		<li class="nav-item">
+		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Категория видео 1</a>
+		</li>
+		<li class="nav-item">
+		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Категория видео 2</a>
+		</li>
+		<li class="nav-item">
+		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Видео от пользователей (фильтр по имени)</a>
+		</li>
+
+{% endif %} <!-- если залогинен -->	
+
+
+
+	</ul>
+	<br>
+</div>

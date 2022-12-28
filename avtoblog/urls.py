@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static  # пути к статическим файлам
 from . import settings  # для MEDIA_URL MEDIA_ROOT
+from blog.views import show_index
 
 
 urlpatterns = [
+    path('', show_index, name='index'),
     path('admin/', admin.site.urls),
-    path('', include('blog.urls')),  # путь к путям приложения blog
+    path('blog/', include('blog.urls')),  # путь к путям приложения blog
     path('', include('account.urls')),  # путь к путям приложения account
     path('', include('comments.urls')),  # путь к путям приложения comments
     path('', include('relatepost.urls')),  # путь к путям приложения relatepost

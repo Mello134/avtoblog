@@ -31,7 +31,7 @@ class RegisterUser(DataMixin, CreateView):
     def form_valid(self, form):
         user = form.save()  # сохраняем данные пользователя в БД (User)
         login(self.request, user)  # авторизовывает пользователя
-        return redirect('home')  # перенаправляет домой
+        return redirect('index')  # перенаправляет домой
 
 
 # Класс представления формы авторизации
@@ -47,7 +47,7 @@ class LoginUser(DataMixin, LoginView):
         return {**context, **c_def}  # в шаблон передаём полный контекст
 
     def get_success_url(self):
-        return reverse_lazy('home')  # при успешном входе перенаправит домой
+        return reverse_lazy('index')  # при успешном входе перенаправит домой
 
 
 # выход из аккаунта

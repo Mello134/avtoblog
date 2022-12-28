@@ -8,7 +8,7 @@ from video.models import VideoYouTubeRuTube
 class AllVideoListShow(DataMixin, ListView):
     # paginate_by = 8 пагинация на будущее
     model = VideoYouTubeRuTube
-    template_name = 'video/video.html'
+    template_name = 'video/video_all.html'
     context_object_name = 'video'  # objects = video (для обращения в шаблоне)
 
     def get_context_data(self, **kwargs):

@@ -2,6 +2,15 @@
 	<br>
 	<ul class="nav flex-column text_side" >
 
+
+
+
+
+        <li class="nav-item">
+		    <a class="nav-link active text-warning pb-2" aria-current="page" href="{% url 'add_post' %}">Добавить пост</a>
+		</li>
+
+
 {% if request.user.is_authenticated %} <!-- если залогинен -->		
 		{% if cat_selected != 'закладки' %} <!-- если не 'закладки' -->
 		<li class="nav-item">

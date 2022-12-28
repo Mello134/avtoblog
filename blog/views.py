@@ -13,7 +13,12 @@ from .models import *
 from .utils import DataMixin
 
 
-# домашняя страница (отображение всех машин)
+# http://127.0.0.1:8000
+def show_index(request):
+    return render(request, 'blog/index.html', {'title': 'Вход на сайт'})
+
+
+# домашняя страница Блога (отображение всех машин)
 class CarsAllShow(DataMixin, ListView):
     paginate_by = 6  # пагинация
     model = Car  # модель cars = Car.objects.all()
