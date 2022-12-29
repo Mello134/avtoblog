@@ -5,30 +5,14 @@
 <!-- {% load embed_video_tags %} -->
 
 
-<!-- вызов файла с собстенными тегами -->
-{% load video_tags %}
-
 {% block title %} 
 	{{ title }}
 {% endblock %}
 
 
 {% block content %}
-
-
-
-
-
 <h1 class="text_shadow">{{ title }}</h1>
 
-<!-- всплывающее окно  -->
-<div class="bg-success">
-	{% if messages %}
-		{% for m in messages %}
-			<h6>{{ m }}</h6>
-		{% endfor %}
-	{% endif %}
-</div>
 
 
 <div class="container-fluid">
@@ -39,7 +23,7 @@
 		<div class="col-xl-6 pt-2 ps-5 pe-5">
 
 			<hr>
-			<h5>{{ v.name }}</h5>
+			<h3>{{ v.name }}</h3>
 
 				Первоисточник: <a href="{{v.video_url}}">{{v.video_url}}</a>
 
@@ -48,29 +32,12 @@
 				<iframe src="{{ v.safe_url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 			</div>
 			<br>
-
-			<p>
-				<span class="h5 pe-5">Отправил: {{ v.author_video }}</span>
-				Лайк | Кол Л: 15 | Add себе | Счётчик просмотров: 7
-			</p>
+			<h5>Отправил: {{ v.author_video }}</h5>
+			<p>Лайк-Количестов лайков: 15 | Добавить в свой плейлист</p>
+			<p>Счётчик просмотров: 7</p>
 
 
-
-
-			<!-- вызываем вложенный тег = show_comments_and_form_comment_self_video -->
-			<!-- request - обязательный первый параметр вложенного тега -->
-			<!-- v.pk - второй параметр тега, т.е делаем из pk_video=None -> в pk_video=v.pk -->
-			{% show_comments_and_form_comment_self_video request v.pk %}
-
-
-
-
-
-
-
-
-
-<!-- 			<form>
+			<form>
 				<a href="#" class="btn">
 					Добавить комментарий
 				</a>
@@ -78,7 +45,7 @@
 			</form>
 			<br>
 			<p>Комментариев: 11</p>
- -->
+
 
 
 <!-- 			{{ request.user.username }}: 
@@ -86,9 +53,9 @@
 				Хорошее видео
 			</p>
  -->
-<!-- 			<a href="#" class="btn">
+			<a href="#" class="btn">
 				Посмотреть все комментарии
-			</a><br> -->
+			</a><br>
 
 <!-- 			Кеша: 
 			<p class="border">

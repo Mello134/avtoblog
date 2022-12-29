@@ -13,7 +13,7 @@ from .models import *
 from .utils import DataMixin
 
 
-# http://127.0.0.1:8000
+# http://127.0.0.1:8000, вход на сайт
 def show_index(request):
     return render(request, 'blog/index.html', {'title': 'Вход на сайт'})
 
