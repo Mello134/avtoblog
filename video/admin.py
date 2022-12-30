@@ -1,5 +1,5 @@
 from django.contrib import admin
-from video.models import VideoYouTubeRuTube, CommentVideoYtRt
+from video.models import VideoYouTubeRuTube, CommentVideoYtRt, LikeMarkVideo
 
 
 # модель видео (в админке)
@@ -18,6 +18,19 @@ class CommentVideoYtRtAdmin(admin.ModelAdmin):
     list_display = ('pk', 'video', 'author_comment', 'text_comment', 'status_comment')
 
 
+# модель лайков и закладок к видео (в админке)
+class LikeMarkVideoAdmin(admin.ModelAdmin):
+    # отображаемые поля в таблице админки
+    list_display = ('user_lm_video', 'video_lm', 'is_like_video', 'is_bookmarks_video')
+    # поля по которым можно вести поиск
+    search_fields = ('user_lm_video', 'video_lm')
+    # редактирование в таблице всех реакций (не заходя в конкретную запись)
+    list_editable = ('is_like_video', 'is_bookmarks_video')
+    # фильтр по полям
+    list_filter = ('user_lm_video', 'video_lm')
+
+
 # Register your models here.
 admin.site.register(VideoYouTubeRuTube, VideoYouTubeRuTubeAdmin)
 admin.site.register(CommentVideoYtRt, CommentVideoYtRtAdmin)
+admin.site.register(LikeMarkVideo, LikeMarkVideoAdmin)

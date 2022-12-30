@@ -54,3 +54,23 @@ class CommentVideoYtRt(models.Model):
         return f'Видео: {self.video}, ' \
                f'Комментатор: {self.author_comment}'
 
+
+# лайки + закладки к видео
+class LikeMarkVideo(models.Model):
+    """ Модель лайк + закладки для видео.
+    Поля:
+    1)пользователь, совершающий действия; 2)видео над которым совершают действие;
+    3)лайк = нет/да; 4)В закладках у пользователя = нет/да."""
+    user_lm_video = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    video_lm = models.ForeignKey(VideoYouTubeRuTube, on_delete=models.CASCADE, verbose_name='Видео',
+                                 related_name='video_to_lmv')
+    is_like_video = models.BooleanField(default=False, verbose_name='Лайк видео')
+    is_bookmarks_video = models.BooleanField(default=False, verbose_name='Видео в закладки')
+
+    class Meta:
+        verbose_name = 'Лайк/Закладка видео'
+        verbose_name_plural = 'Лайки/закладки к видео'
+
+    def __str__(self):
+        return f'Пользователь: {self.user_lm_video}, Видео: {self.video_lm}'
+

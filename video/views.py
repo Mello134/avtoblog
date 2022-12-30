@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from django.views.generic import ListView
-from django.views.generic.edit import ModelFormMixin
-
 from blog.utils import DataMixin
-from video.forms import CommentVideoYtRtForm
 from video.models import VideoYouTubeRuTube
+
+"""Всё что связано с реакциями на отдельное видео (лайки, закладки, комментарии)
+Смотри video_tags - все функции там, так как реализация через вложенный тег"""
 
 
 # представление шаблона со списком видео

@@ -1,0 +1,168 @@
+
+<!-- video_obj = {{ video_obj }} какое видео смотрим -->
+{% load static %}
+
+
+
+<div class="d-flex justify-content-between"> <!-- внешний флекс для строчки 'Комментарии: 7     Закл | Лайк' -->
+	<div class="bd-highlight mt-2">
+		<!-- Колличество комментариев -->
+		<span class="h5">Комментарии: {{ all_comments_for_video.all.count }}</span>
+	</div>
+
+
+{% if request.user.is_authenticated %} <!-- авторизован ли? - для лайков и комментариев -->
+
+	{% if likemarks_to_video == 'no' %} <!-- если не было реакций от пользователя -->	
+		
+		<div class="bd-highlight">
+
+			<!-- кнопка закладки НЕАКТИВНАЯ -->
+			<a class="btn" href="{%  url 'bookmarks_video' pk_video=video_obj.pk %}">
+				<img src="{% static 'blog/images/bookmark-off.png' %}" height="32" width="32" class="img-fluid">
+			</a>
+
+			<!-- кнопка лайк НЕАКТИВНАЯ -->
+			<a class="btn" href="{%  url 'like_video' pk_video=video_obj.pk %}">
+				<img src="{% static 'blog/images/heart-off.png' %}" height="32" width="32" class="img-fluid">
+			</a>			
+
+			{% if total_likes_video > 0 %} <!-- если лайки есть -->
+				{{ total_likes_video }} <!-- количество лайков -->
+			{% endif %}	<!-- если лайки есть -->	
+
+		</div>
+
+	{% else %} <!-- если были реакций от пользователя -->	
+		{% for lm_one in likemarks_to_video %} <!-- перебираем поля реакций -->
+			<div class="bd-highlight">
+				
+				{% if lm_one.is_bookmarks_video == True %} <!-- если в закладках -->
+					<!-- кнопка закладки АКТИВНАЯ -->
+					<a class="btn" href="{%  url 'bookmarks_video' pk_video=video_obj.pk %}">
+						<img src="{% static 'blog/images/bookmark-on.png' %}" height="32" width="32" class="img-fluid">
+					</a>
+				{% else %} <!-- если не в закладках -->
+					<!-- кнопка закладки НЕ АКТИВНАЯ -->
+					<a class="btn" href="{%  url 'bookmarks_video' pk_video=video_obj.pk %}">
+						<img src="{% static 'blog/images/bookmark-off.png' %}" height="32" width="32" class="img-fluid">
+					</a>
+				{% endif %} <!-- если в закладках -->
+
+
+				{% if lm_one.is_like_video == True %} <!-- если ЛАЙК стоит -->
+					<!-- кнопка лайе АКТИВНАЯ -->
+					<a class="btn" href="{%  url 'like_video' pk_video=video_obj.pk %}">
+						<img src="{% static 'blog/images/heart-on.png' %}" height="32" width="32" class="img-fluid">
+					</a>
+				{% else %} <!-- если НЕ стоит ЛАЙК-->
+					<a class="btn" href="{%  url 'like_video' pk_video=video_obj.pk %}">
+						<img src="{% static 'blog/images/heart-off.png' %}" height="32" width="32" class="img-fluid">
+					</a>
+				{% endif %} <!-- если ЛАЙК стоит -->
+
+				{% if total_likes_video > 0 %} <!-- если лайки есть -->
+					{{ total_likes_video }} <!-- количество лайков -->
+				{% endif %}	<!-- если лайки есть -->	
+
+
+			</div>
+		{% endfor %} <!-- перебираем поля реакций -->
+
+	{% endif %}	<!-- если не было реакций от пользователя -->	
+
+{% endif %}	<!-- авторизован ли? - для лайков и комментариев -->
+
+</div><!-- внешний флекс для строчки 'Комментарии: 7     Закл | Лайк' -->
+
+
+
+
+
+{% if request.user.is_authenticated %} <!-- авторизован ли? -для добавление коммментария -->
+
+
+	<!-- Гипер важно, в action - url = 127/add-comment/<int:pk_video>/ - этой страницы даже не существует, но путь нужен для того чтобы выполнить функцию, в нашем случае функция это вложенный тег! - show_form_comment_video -->
+	<!-- pk_video в action - взято имено из urls.py, там оно взято из вложенного тега -->
+	<!-- video_obj - это одна запись конкретного видео -->
+	<!-- video_obj = VideoYouTubeRuTube.objects.get(pk=pk_video) -->
+	<!-- video_obj.pk - id записи видео -->
+	<!-- video_obj.name - имя записи видео -->
+	<!-- id="{{ video_obj.name }}" = <button form="{{ video_obj.name }}" здесь условие обязательное, это отношение конкретной кнопки к конкретной форме, а у нас на странице video_all - много кнопок и много форм! -->
+<!-- форма для создания комментария к каждому видео -->
+
+
+<form action="{%  url 'add_comment' pk_video=video_obj.pk %}" method="post" id="{{ video_obj.name }}">
+{% csrf_token %}
+	<div class="col-12" >{{ form.as_p }}</div>
+</form>
+
+<!-- кнопка для создания комментария к каждому видео -->
+<button form="{{ video_obj.name }}" type="submit" class="btn btn-outline-info btn-md">
+	Добавить комментарий
+</button>
+
+{% else %} <!-- НЕ авторизован -для добавление коммментария -->
+
+<p style="font-size: 1.2em" class="text-info">
+	Только авторизованные пользователи могут реагировать на статью.
+</p>
+<a href="{% url 'login' %}" class="btn btn-outline-info">Войти</a>
+<a href="{% url 'register' %}" class="btn btn-outline-warning">Регистрация</a>
+
+{% endif %} <!-- авторизован ли? -для добавление коммментария -->
+
+
+
+
+
+<!-- если у видео есть комментарии -->
+{% if all_comments_for_video.all.count > 0 %}
+
+<!-- логика и кнопка разворачивания списка комментариев -->
+
+  <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ video_obj.pk }}" aria-expanded="false" aria-controls="collapse{{ video_obj.pk }}">
+    Посмотреть комментарии
+  </button>
+
+
+
+<!-- сворачиваемое содержимое bootstrap -->
+<div class="collapse" id="collapse{{ video_obj.pk }}">
+
+	<!-- Вывод списка комментариев, относящихся к каждому видео -->
+	<p style="font-size: 1.2em">Все комментарии к видео:</p>
+	<!-- перебор всех комментариев к конкретному видео -->
+	{% for com in all_comments_for_video %}
+	<ul class="list-group">
+		
+		<li class="list-group-item list-group-item-dark"> 
+			<div class="d-flex justify-content-between"> <!-- внешний флекс -->
+				<div class="bd-highlight"><!-- автор к -->
+					{{ com.author_comment }}:
+				</div><!-- автор к -->
+
+				<!-- дата | лайк -->
+				<div class="bd-highlight text-secondary">
+					<div class="d-flex flex-row bd-highlight">
+						<div class="pe-2 bd-highlight"><!-- дата -->
+						{{ com.time_create |date:'d.m.Y H:i' }}
+						</div><!-- дата -->
+
+						<div class="ps-2 bd-highlight"><!-- лайк -->
+							Лайк
+						</div><!-- лайк -->
+					</div>
+				</div>
+			</div><!-- внешний флекс -->
+		</li>
+		<li class="list-group-item list-group-item-light">{{ com.text_comment}}</li>
+	</ul>
+	<br>
+	{% endfor %}<!-- переблр комментариев к видео -->
+</div>
+
+{% endif %}<!-- если у видео есть комментарии -->
+
+
+
