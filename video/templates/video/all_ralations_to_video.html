@@ -152,9 +152,20 @@
 		
 		<li class="list-group-item list-group-item-dark"> 
 			<div class="d-flex justify-content-between pb-0 pt-0"> <!-- внешний флекс -->
-				<div class="bd-highlight"><!-- автор к -->
-					{{ com.author_comment }}:
-				</div><!-- автор к -->
+				
+				<div class="bd-highlight"><!-- автор к и удалить к -->
+<!-- Если пользователь автор коммента или админ (id 1) -->
+{% if request.user.pk == com.author_comment.pk or request.user.pk == 1 %}
+						<!-- кнопка Удаления комментария -->
+						<span class="pe-2">
+							<a class="btn p-0 m-0" href="{% url 'delete_comment' pk_com=com.pk %}">
+								<img src="{% static 'blog/images/delete.png' %}" height="20" width="20" class="img-fluid pb-1">
+							</a>							
+						</span>
+{% endif %} <!-- Если пользователь автор коммента или админ (id 1) -->
+
+						<span>{{ com.author_comment }}:</span>
+				</div><!-- автор к и удалить к -->
 
 				<!-- дата | лайк -->
 				<div class="bd-highlight text-secondary">

@@ -197,18 +197,18 @@ def like_button_comment_video(request, pk_com):
     return redirect('video_all')
 
 
-# # логика кнопки удаления комментария
-# @login_required
-# def delete_comment_video_button(request, pk_com):
-#     # пробую получить запись комментария
-#     comment = get_object_or_404(CommentVideoYtRt, pk=pk_com)
-#
-#     # если вы автор комментария или админ
-#     if comment.author_comment.pk == request.user.pk or request.user.pk == 1:
-#         comment.delete()  # удаляю запись комментарий
-#         messages.info(request, f"{request.user.username} - удалил комментарий!")
-#     else:
-#         messages.info(request, f"{request.user.username} - вы не можете удалить чужой комментарий!")
-#
-#     # перенаправляемся/остаёмся на странице списка видео
-#     return redirect('video_all')
+# логика кнопки удаления комментария
+@login_required
+def delete_comment_video_button(request, pk_com):
+    # пробую получить запись комментария
+    comment = get_object_or_404(CommentVideoYtRt, pk=pk_com)
+
+    # если вы автор комментария или админ
+    if comment.author_comment.pk == request.user.pk or request.user.pk == 1:
+        comment.delete()  # удаляю запись комментарий
+        messages.info(request, f"{request.user.username} - удалил комментарий!")
+    else:
+        messages.info(request, f"{request.user.username} - вы не можете удалить чужой комментарий!")
+
+    # перенаправляемся/остаёмся на странице списка видео
+    return redirect('video_all')
