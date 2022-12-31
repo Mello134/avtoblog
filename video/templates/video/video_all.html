@@ -34,7 +34,7 @@
 	<div class="row">
 
 		<!-- video = VideoYouTubeRuTube.objects.all() -->
-		{% for v in video %}
+		{% for v in video %} <!-- перебираю все видео -->
 		<div class="col-xl-6 pt-2 ps-5 pe-5">
 
 			<hr>
@@ -61,7 +61,7 @@
 			</div>			
 
 
-
+			<!-- Этот вложенный тег = реакциям для одного видео, сколько видео столько и тегов, вызвали в цикле -->
 			<!-- вызываем вложенный тег = show_all_ralations_to_video -->
 			<!-- request - обязательный первый параметр вложенного тега -->
 			<!-- v.pk - второй параметр тега, т.е делаем из pk_video=None -> в pk_video=v.pk -->
@@ -71,7 +71,7 @@
 
 			<hr>
 		</div>
-		{% endfor %}
+		{% endfor %}<!-- перебираю все видео -->
 	</div><!-- row -->
 </div><!-- container -->
 

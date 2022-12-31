@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
-from embed_video.fields import EmbedVideoField  # django-embed-video
+from embed_video.fields import EmbedVideoField  # django-embed-video поле которое проверят именно youtube ссылку, я от этого отошел
 
 
-# Видеофайлы YouTube/Rutube
+# Видеофайлы YouTube/RuTube
 class VideoYouTubeRuTube(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название видео')
     video_url = models.URLField(verbose_name='Ссылка на видео')  # ссылка стороннего видео - django-embed-video
@@ -33,28 +33,6 @@ class VideoYouTubeRuTube(models.Model):
         return final_url
 
 
-# Комментарии для видео
-class CommentVideoYtRt(models.Model):
-    video = models.ForeignKey(VideoYouTubeRuTube, on_delete=models.CASCADE, verbose_name='Видео',
-                              blank=True, null=True, related_name='comment_video')
-    author_comment = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария',
-                                       blank=True, null=True)
-    time_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания комментария')
-    text_comment = models.TextField(verbose_name='Текст комментария')
-    # видно/не видно
-    status_comment = models.BooleanField(verbose_name='Видимость комментария', default=True)
-
-    class Meta:
-        verbose_name = 'Комментарий к видео'
-        verbose_name_plural = 'Комментарии к видео'
-        ordering = ['-time_create']  # сортировка по дате
-
-    # отображение записи при обращении
-    def __str__(self):
-        return f'Видео: {self.video}, ' \
-               f'Комментатор: {self.author_comment}'
-
-
 # лайки + закладки к видео
 class LikeMarkVideo(models.Model):
     """ Модель лайк + закладки для видео.
@@ -74,3 +52,42 @@ class LikeMarkVideo(models.Model):
     def __str__(self):
         return f'Пользователь: {self.user_lm_video}, Видео: {self.video_lm}'
 
+
+# Комментарии для видео
+class CommentVideoYtRt(models.Model):
+    video = models.ForeignKey(VideoYouTubeRuTube, on_delete=models.CASCADE, verbose_name='Видео',
+                              blank=True, null=True, related_name='comment_video')
+    author_comment = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария',
+                                       blank=True, null=True)
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания комментария')
+    text_comment = models.TextField(verbose_name='Текст комментария')
+    # видно/не видно
+    status_comment = models.BooleanField(verbose_name='Видимость комментария', default=True)
+
+    class Meta:
+        verbose_name = 'Комментарий к видео'
+        verbose_name_plural = 'Комментарии к видео'
+        ordering = ['-time_create']  # сортировка по дате
+
+    # отображение записи при обращении
+    def __str__(self):
+        return f'PK_Com: {self.pk} __;' \
+               f'Видео: {self.video}; ' \
+               f'Комментатор: {self.author_comment}.'
+
+
+# Лайк для комментария к видео
+class LikeCommentVideoYtRt(models.Model):
+    # лайкнувший пользователь
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Лайкнувший пользователь')
+    # Лайкнутый комментарий
+    comment = models.ForeignKey(CommentVideoYtRt, on_delete=models.CASCADE, verbose_name='Лайкнутый комментарий')
+
+    class Meta:
+        verbose_name = 'Лайк комментария к видео'
+        verbose_name_plural = 'Лайки комментариев к видео'
+        # db_table = 'Название таблицы в БД'
+
+    def __str__(self):
+        return f'Лайк_Ком_Видео - {self.comment},' \
+               f'Лайк_Юзер - {self.user}.'

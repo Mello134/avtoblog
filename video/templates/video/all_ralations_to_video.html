@@ -1,6 +1,10 @@
+<!-- вызов файла с собстенными тегами -->
+{% load video_tags %}
+
 
 <!-- video_obj = {{ video_obj }} какое видео смотрим -->
 {% load static %}
+
 
 
 
@@ -69,7 +73,16 @@
 			</div>
 		{% endfor %} <!-- перебираем поля реакций -->
 
-	{% endif %}	<!-- если не было реакций от пользователя -->	
+	{% endif %}	<!-- если не было реакций от пользователя -->
+
+{% else %}	<!-- авторизован ли? - для лайков и комментариев -->
+
+	<div class="bd-highlight">
+		<img src="{% static 'blog/images/heart-off.png' %}" height="32" width="32" class="img-fluid pe-1">
+		{% if total_likes_video > 0 %} <!-- если лайки есть -->
+			&nbsp;{{ total_likes_video }} <!-- количество лайков -->
+		{% endif %}	<!-- если лайки есть -->	
+	</div>
 
 {% endif %}	<!-- авторизован ли? - для лайков и комментариев -->
 
@@ -132,12 +145,13 @@
 
 	<!-- Вывод списка комментариев, относящихся к каждому видео -->
 	<p style="font-size: 1.2em">Все комментарии к видео:</p>
+
 	<!-- перебор всех комментариев к конкретному видео -->
 	{% for com in all_comments_for_video %}
 	<ul class="list-group">
 		
 		<li class="list-group-item list-group-item-dark"> 
-			<div class="d-flex justify-content-between"> <!-- внешний флекс -->
+			<div class="d-flex justify-content-between pb-0 pt-0"> <!-- внешний флекс -->
 				<div class="bd-highlight"><!-- автор к -->
 					{{ com.author_comment }}:
 				</div><!-- автор к -->
@@ -149,14 +163,29 @@
 						{{ com.time_create |date:'d.m.Y H:i' }}
 						</div><!-- дата -->
 
-						<div class="ps-2 bd-highlight"><!-- лайк -->
-							Лайк
+
+
+						<div class="ps-2 pb-0 pt-0 bd-highlight"><!-- лайк -->
+<!-- НАЧАЛО ТЕГА ЛАЙК НА КОММЕНТАРИЙ-->
+							<!-- Вызываю вложенный тег для блока лайк комметанрие -->
+							<!-- ТЕГ ВНУТРИ ТЕГА -->
+							<!-- (request, pk_com=com.pk -->
+            	{% show_like_to_comment_video request com.pk %} <!-- ВЫЗОВ БЛОКА ЛАЙК_КОМ -->
+<!-- КОНЕЦ ЛАЙК НА КОММЕНТАРИЙ -->
 						</div><!-- лайк -->
+
+
+
+
 					</div>
 				</div>
 			</div><!-- внешний флекс -->
 		</li>
-		<li class="list-group-item list-group-item-light">{{ com.text_comment}}</li>
+		<li class="list-group-item list-group-item-light">
+			<span >
+				{{ com.text_comment}}
+			</span>
+		</li>
 	</ul>
 	<br>
 	{% endfor %}<!-- переблр комментариев к видео -->

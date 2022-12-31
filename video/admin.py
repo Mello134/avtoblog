@@ -1,5 +1,5 @@
 from django.contrib import admin
-from video.models import VideoYouTubeRuTube, CommentVideoYtRt, LikeMarkVideo
+from video.models import VideoYouTubeRuTube, CommentVideoYtRt, LikeMarkVideo, LikeCommentVideoYtRt
 
 
 # модель видео (в админке)
@@ -34,3 +34,4 @@ class LikeMarkVideoAdmin(admin.ModelAdmin):
 admin.site.register(VideoYouTubeRuTube, VideoYouTubeRuTubeAdmin)
 admin.site.register(CommentVideoYtRt, CommentVideoYtRtAdmin)
 admin.site.register(LikeMarkVideo, LikeMarkVideoAdmin)
+admin.site.register(LikeCommentVideoYtRt)
