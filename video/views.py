@@ -1,5 +1,7 @@
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView
 from blog.utils import DataMixin
+from video.forms import VideoYouTubeRuTubeForm
 from video.models import VideoYouTubeRuTube
 
 """Всё что связано с реакциями на отдельное видео (лайки, закладки, комментарии)
@@ -17,3 +19,29 @@ class AllVideoListShow(DataMixin, ListView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Все видео')
         return {**context, **c_def}
+
+
+# представление для создания видеопоста
+class AddVideo(CreateView):
+    model = VideoYouTubeRuTube  # модель объекта (может быть и не нужна)
+    template_name = 'video/video_add.html'  # шаблон
+    form_class = VideoYouTubeRuTubeForm  # наша форма
+    success_url = reverse_lazy('video_all')  # перенаправление после обработки формы
+
+    # переопределяем метод form_valid (для того чтобы автор автоматом заполнился)
+    def form_valid(self, form):  # берём форму
+        self.object = form.save(commit=False)  # когда нужно что-то подкорректировать автоматом
+        self.object.author_video = self.request.user  # записываю в поле автор авторизованного пользователя (автоматом)
+        self.object.save()  # форма пересохраняется с новыми данными
+        return super().form_valid(form)  # форма передаётся в базу данных и программа продолжит свои действия
+
+    # переопределяю (добавляю в контекст свою информацию)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)  # распаковываем изначальный контекст
+        context['title'] = 'Добавление видео c YouTube или Rutube'  # добавил title в контекст
+        return {**context}  # передаю весь распакованный контекст
+
+
+
+
+

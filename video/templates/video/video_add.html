@@ -1,0 +1,119 @@
+{% extends 'video/video_base.html' %}
+{% load static %}
+
+{% block title %} 
+	{{ title }}
+{% endblock %}
+
+{% block content %}
+
+
+<h1 class="text-center">{{ title }}</h1>
+<hr><br><br>
+
+
+{% if request.user.is_authenticated %} <!-- авторизован ли? -->
+
+
+<form method="post">
+	{% csrf_token %}
+
+	<div class="form-error">{{ form.non_field_errors }}</div> <!-- общая ошибка формы -->
+
+	{% for f in form %}  <!-- перибираем поля формы -->
+	<!-- f.label-название поля / f - само поле -->
+	<p>
+		<label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}
+	</p>
+	<div class="form-error">{{ f.errors }}</div> <!-- ошибка в поле -->
+	{% endfor %} <!-- перибираем поля формы -->
+	<br>
+	<button type="submit" class="btn btn-outline-info btn-lg">
+		Добавить видео
+	</button>
+</form>
+<br>
+
+<!-- логика и кнопка разворачивания списка комментариев -->
+
+<button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTutorial" aria-expanded="false" aria-controls="collapseTutorial">
+Посмотреть инструкцию
+</button>
+
+<br><br>
+
+<!-- сворачиваемое содержимое bootstrap -->
+<div class="collapse" id="collapseTutorial">
+
+	<h3 class="text-center">Инструкция добавления видео с YouTube</h3>
+	<hr>
+	<br>
+	<div class="container-fluid">
+		<ol>
+			<div class="row"> <!-- row для для Инструкции -->
+				<div class="col-xl-4">
+					<li>
+						Перейдите на страничку видео в <a href="https://www.youtube.com/" class="link-info">https://www.youtube.com/</a> и наждмите - "Поделиться". 
+						<br><br>
+						<img src="{% static 'blog/images/add_vid_1.png' %}" class="img-fluid rounded">
+						<br><br>
+					</li>
+					
+				</div> <!-- col для для Инструкции -->
+
+
+				<div class="col-xl-4">
+					
+						<li>
+							Нажмите - "Копировать".
+							<br><span class="text-info">Важно чтобы ссылка была именно в таком виде, в котором платформа YouTube нам её передаёт!</span> 
+							<br><br>
+							<img src="{% static 'blog/images/add_vid_2.png' %}" class="img-fluid rounded">
+							<br><br>
+						</li>
+					
+				</div>
+
+
+				<div class="col-xl-4">
+					
+					<li>
+						Вставьте ссылку в поле "Ссылка на видео:" - на нашем сайте!
+						<br><br>
+						<img src="{% static 'blog/images/add_vid_3.png' %}" class="img-fluid rounded">
+						<br><br>
+					</li>
+					<li>
+						Придумайте название к добавляемому видео, и напишете в поле "Название видео:" - на нашем сайте!
+					</li>
+					<li>
+						Жмём кнопку "Добавить видео". Готово!
+					</li>
+					
+					
+				</div> <!-- col для Инструкции -->
+			</div> <!-- row для для Инструкции -->
+		</ol>
+	</div> <!-- container для для Инструкции -->
+
+
+
+	<p style="font-size: 1.2em" class="text-info">
+		- Способ добавления видео с Rutube - полностью аналогичен инструкции на примере YouTube.
+	</p>
+
+</div> <!-- collaps для для Инструкции -->
+
+{% else %} <!-- НЕ авторизован -->
+
+<p style="font-size: 1.2em">
+	- Только авторизованные пользователи могут добавить видео пост, пожалуйста авторизуйтесь или загеристрируйте новый аккаунт.
+</p>
+<a href="{% url 'login' %}" class="btn btn-outline-info btn-lg">Войти</a>
+<a href="{% url 'register' %}" class="btn btn-outline-warning btn-lg">Регистрация</a>
+
+
+{% endif %} <!-- авторизован ли -->
+
+
+{% endblock %}

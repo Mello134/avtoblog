@@ -6,6 +6,7 @@ from .views import *
 
 urlpatterns = [
     path('all/', AllVideoListShow.as_view(), name="video_all"),
+    path('video_add/', AddVideo.as_view(), name='video_add'),  # Добавление видео
 
     # show_all_ralations_to_video - Это вложенный тег (шаблон all_ralations_to_video),
     # В ней находится вывод и обработка формы для комментариев

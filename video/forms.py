@@ -1,5 +1,16 @@
 from django import forms
-from video.models import CommentVideoYtRt
+from video.models import CommentVideoYtRt, VideoYouTubeRuTube
+
+
+# форма создания нового видеопоста
+class VideoYouTubeRuTubeForm(forms.ModelForm):
+    class Meta:
+        model = VideoYouTubeRuTube
+        fields = ['name', 'video_url']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control, col-6'}),
+            'video_url': forms.URLInput(attrs={'class': 'form-control, col-6'}),
+        }
 
 
 # форма создания комментария к видео
