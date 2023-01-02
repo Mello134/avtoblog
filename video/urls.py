@@ -5,7 +5,11 @@ from .templatetags.video_tags import show_all_ralations_to_video, like_video, bo
 from .views import *
 
 urlpatterns = [
-    path('all/', AllVideoListShow.as_view(), name="video_all"),
+    path('all/', AllVideoListShow.as_view(), name="video_all"),  # отображение всех видео
+    path('bookmarks/', BookmarksVideoListShow.as_view(), name='video_bookmarks'),  # отображение списка по закладкам
+
+
+
     path('video_add/', AddVideo.as_view(), name='video_add'),  # Добавление видео
     path('video_update/<int:pk_video>/', UpdateVideo.as_view(), name='video_update'),  # Обновить видео пост
     path('video_delete/<int:pk_video>/', DeleteVideo.as_view(), name='video_delete'),  # Удалить видео

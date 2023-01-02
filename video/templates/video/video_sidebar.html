@@ -15,7 +15,6 @@
 		<li class="nav-item">
 			<a class="nav-link active" aria-current="page" href="{% url 'video_all' %}">Все видео</a>
 		</li>
-
 		{% endif %}
 
 
@@ -23,20 +22,26 @@
 
 {% if request.user.is_authenticated %} <!-- если залогинен -->
 
+		{% if sidebar_selected == 'bookmarks' %}		
+		<li class="nav-item">
+			<a class="nav-link disabled" href="{% url 'video_bookmarks' %}" tabindex="-1" aria-disabled="true">Добавленные</a>
+		</li>
+		{% else %}
+		<li class="nav-item">
+			<a class="nav-link active" aria-current="page" href="{% url 'video_bookmarks' %}">Добавленные</a>
+		</li>
+		{% endif %}	
+
+
+
+
+
 		<li class="nav-item">
 		    <a class="nav-link active" aria-current="page" href="#">Мои видео</a>
 		</li>
 
 		<li class="nav-item">
 		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Мои видео</a>
-		</li>		
-
-		<li class="nav-item">
-		    <a class="nav-link active" aria-current="page" href="#">Добавленные видео</a>
-		</li>
-
-		<li class="nav-item">
-		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Добавленные видео</a>
 		</li>
 
 		<li class="nav-item">

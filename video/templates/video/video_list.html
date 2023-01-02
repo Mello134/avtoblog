@@ -29,7 +29,12 @@
 
 <h1 class="text_shadow">{{ title }}</h1>
 
-
+{% if video.all.count == 0 %} <!-- если записей нет -->
+<hr>
+<p class="h4">
+	Здесь ещё нет записей.
+</p>
+{% endif %} <!-- если записей нет -->
 
 
 <div class="container-fluid">
