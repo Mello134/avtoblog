@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from blog.utils import DataMixin
-from video.forms import VideoYouTubeRuTubeForm
+from video.forms import VideoYouTubeRuTubeForm, VideoYouTubeRuTubeUpdateForm
 from video.models import VideoYouTubeRuTube
 
 """Всё что связано с реакциями на отдельное видео (лайки, закладки, комментарии)
@@ -42,6 +42,19 @@ class AddVideo(CreateView):
         return {**context}  # передаю весь распакованный контекст
 
 
+# представление для редактирования видеопоста (только поле имя поста)
+class UpdateVideo(UpdateView):
+    model = VideoYouTubeRuTube
+    form_class = VideoYouTubeRuTubeUpdateForm
+    pk_url_kwarg = 'pk_video'  # переопределили, стандартно: [pk_url_kwarg = "pk"]
+    template_name = 'video/video_update.html'
+    success_url = reverse_lazy('video_all')  # перенаправление после обработки формы
+
+    # добавляю в контекст свои параметры
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)  # в контексте сейчас только форма и pk
+        context['title'] = 'Редактирование видеопоста'
+        return {**context}
 
 
 

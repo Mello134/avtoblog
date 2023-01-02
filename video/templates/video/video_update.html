@@ -1,0 +1,54 @@
+{% extends 'video/video_base.html' %}
+{% load static %}
+
+{% block title %} 
+	{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ title }}</h1>
+<hr>
+<br><br>
+
+
+
+<!-- Если пк пользователя = пк автора статьи или 1 -->
+{% if request.user.pk == videoyoutuberutube.author_video.pk or request.user.pk == 1 %}
+
+<form method="post">
+	{% csrf_token %}
+
+	<div class="form-error">{{ form.non_field_errors }}</div> <!-- общая ошибка формы -->
+
+	{% for f in form %}  <!-- перибираем поля формы -->
+	<!-- f.label-название поля / f - само поле -->
+	<p>
+		<label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}
+	</p>
+	<div class="form-error">{{ f.errors }}</div> <!-- ошибка в поле -->
+	{% endfor %} <!-- перибираем поля формы -->
+	<br>
+	<button type="submit" class="btn btn-outline-info btn-lg">
+		Применить редактирование
+	</button>
+</form>
+
+{% else %} <!-- Если пк пользователя != пк автора статьи или 1 -->
+
+<div class="form-error">
+	<p>Только автор статьи - может редактировать статью.</p>
+	<p>Если вы содавали эту статью с другого акканутра, войдите в него.</p>
+	<br><br>
+	<p>
+		Пройдите авторизацию: <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Войти</a>
+	</p>
+<!-- 	<p>
+		Либо зарегистрируйтесь:<a href="{% url 'register' %}" class="btn btn-warning btn-sm">Регистрация</a> -->
+ 
+	</p>
+</div>
+
+{% endif %} <!-- Если пк пользователя = пк автора статьи или 1 -->
+
+{% endblock %}

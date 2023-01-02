@@ -13,6 +13,14 @@ class VideoYouTubeRuTubeForm(forms.ModelForm):
         }
 
 
+# форма редактирования видеопоста
+class VideoYouTubeRuTubeUpdateForm(forms.ModelForm):
+    class Meta:
+        model = VideoYouTubeRuTube
+        fields = ['name']
+        widgets = {'name': forms.TextInput(attrs={'class': 'form-control, col-6'})}
+
+
 # форма создания комментария к видео
 class CommentVideoYtRtForm(forms.ModelForm):
     class Meta:

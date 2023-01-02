@@ -20,10 +20,6 @@ class VideoYouTubeRuTube(models.Model):
         verbose_name_plural = "Видеофайл c YouTube/RuTube"
         ordering = ['-time_update']
 
-    # функция формирования маршрута к ссылке
-    def get_absolute_url(self):
-        return reverse('update_video', kwargs={'pk_video': self.pk})
-
     # метод будет автоматически конвертировать ссылку, для возможности отображения у себя на сайте
     # Это политика YouTube/RuTube
     # по сути берём ссылку пользователя, и конвертируем в ссылку для разработчика!

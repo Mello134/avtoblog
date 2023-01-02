@@ -8,6 +8,8 @@
 <!-- вызов файла с собстенными тегами -->
 {% load video_tags %}
 
+{% load static %}
+
 {% block title %} 
 	{{ title }}
 {% endblock %}
@@ -53,9 +55,20 @@
 
 			<div class="d-flex justify-content-between"> <!-- внешний флекс -->
 				<div class="bd-highlight mt-2">
-					<span class="h5">Отправил: {{ v.author_video }}</span>
+
+					<!-- Если пк пользователя = пк автора статьи или 1 -->
+					{% if request.user.pk == v.author_video.pk or request.user.pk == 1 %}
+
+					<a class="btn" href="{% url 'video_update' pk_video=v.pk %}">
+						<img src="{% static 'blog/images/update.png' %}" height="24" width="24" class="img-fluid pb-2">
+					</a>
+
+					{% endif %} <!-- Если пк пользователя = пк автора статьи или 1 -->
+
+					<span class="h5">
+					Отправил: {{ v.author_video }}</span>
 				</div>
-				<div class="bd-highlight mt-2">
+				<div class="bd-highlight pt-3">
 					Счётчик просмотров: <span class="text-info">7</span>
 				</div>
 			</div>			
