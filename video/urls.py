@@ -7,7 +7,7 @@ from .views import *
 urlpatterns = [
     path('all/', AllVideoListShow.as_view(), name="video_all"),  # отображение всех видео
     path('bookmarks/', BookmarksVideoListShow.as_view(), name='video_bookmarks'),  # отображение списка по закладкам
-
+    path('my/', MyVideoListShow.as_view(), name='video_my'),  # отображение собственных видео
 
 
     path('video_add/', AddVideo.as_view(), name='video_add'),  # Добавление видео

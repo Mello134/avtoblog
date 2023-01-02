@@ -3,8 +3,9 @@
 	<ul class="nav flex-column text_side" >
 
 		<li class="nav-item">
-		    <a class="nav-link active text-warning pb-2" aria-current="page" href="{% url 'video_add' %}">Добавить видео</a>
+		    <a class="nav-link active text-warning pb-2" aria-current="page" href="{% url 'video_add' %}">Загрузить видео</a>
 		</li>
+		<hr>
 
 
 		{% if sidebar_selected == 'all' %}		
@@ -32,17 +33,20 @@
 		</li>
 		{% endif %}	
 
-
-
-
-
+		{% if sidebar_selected == 'my' %}		
 		<li class="nav-item">
-		    <a class="nav-link active" aria-current="page" href="#">Мои видео</a>
+			<a class="nav-link disabled" href="{% url 'video_my' %}" tabindex="-1" aria-disabled="true">Мои видео</a>
 		</li>
-
+		{% else %}
 		<li class="nav-item">
-		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Мои видео</a>
+			<a class="nav-link active" aria-current="page" href="{% url 'video_my' %}">Мои видео</a>
 		</li>
+		{% endif %}	
+
+
+
+		<hr>
+		<br><br><br><br>
 
 		<li class="nav-item">
 		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Категория видео 1</a>

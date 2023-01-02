@@ -58,6 +58,26 @@ class BookmarksVideoListShow(LoginRequiredMixin, ListView):
         return {**context}
 
 
+# представление шаблона со списком видео (добавленных в закладки пользователем)
+class MyVideoListShow(LoginRequiredMixin, ListView):
+    login_url = 'login'
+    model = VideoYouTubeRuTube
+    template_name = 'video/video_list.html'
+    context_object_name = 'video'
+    allow_empty = True  # разрешаю пустой список
+
+    # меняю параметры вывода по фильтру
+    def get_queryset(self):
+        # список видео, где автором видеопоста является текущий пользователь
+        return VideoYouTubeRuTube.objects.filter(author_video=self.request.user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Мои видео'
+        context['sidebar_selected'] = 'my'
+        return {**context}
+
+
 # представление для создания видеопоста
 class AddVideo(CreateView):
     model = VideoYouTubeRuTube  # модель объекта (может быть и не нужна)
