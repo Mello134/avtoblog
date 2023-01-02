@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from blog.utils import DataMixin
 from video.forms import VideoYouTubeRuTubeForm, VideoYouTubeRuTubeUpdateForm
 from video.models import VideoYouTubeRuTube
@@ -9,16 +9,17 @@ from video.models import VideoYouTubeRuTube
 
 
 # представление шаблона со списком видео
-class AllVideoListShow(DataMixin, ListView):
-    # paginate_by = 8 пагинация на будущее
+class AllVideoListShow(ListView):
+    # paginate_by = 4 пагинация на будущее
     model = VideoYouTubeRuTube
     template_name = 'video/video_list.html'
     context_object_name = 'video'  # objects = video (для обращения в шаблоне)
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Все видео')
-        return {**context, **c_def}
+        context = super().get_context_data(**kwargs)  # в контексте сейчас только форма, объект
+        context['title'] = 'Все видео'
+        context['sidebar_selected'] = 'all'
+        return {**context}
 
 
 # представление для создания видеопоста
@@ -52,9 +53,22 @@ class UpdateVideo(UpdateView):
 
     # добавляю в контекст свои параметры
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)  # в контексте сейчас только форма и pk
+        context = super().get_context_data(**kwargs)  # в контексте сейчас только форма, объект
         context['title'] = 'Редактирование видеопоста'
         return {**context}
 
+
+# представление для удаления видеопоста
+class DeleteVideo(DeleteView):
+    model = VideoYouTubeRuTube
+    template_name = 'video/video_delete.html'
+    pk_url_kwarg = 'pk_video'  # переопределили, стандартно: [pk_url_kwarg = "pk"]
+    success_url = reverse_lazy('video_all')  # перенаправление после обработки формы
+
+    # добавляю в контекст свои параметры
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)  # в контексте сейчас только форма, объект
+        context['title'] = 'Удаление видеопоста'
+        return {**context}
 
 

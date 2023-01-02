@@ -8,7 +8,7 @@ urlpatterns = [
     path('all/', AllVideoListShow.as_view(), name="video_all"),
     path('video_add/', AddVideo.as_view(), name='video_add'),  # Добавление видео
     path('video_update/<int:pk_video>/', UpdateVideo.as_view(), name='video_update'),  # Обновить видео пост
-    # path('video_delete/<int:pk_video>/', DeleteVideo.as_view(), name='video_delete'),  # Удалить видео
+    path('video_delete/<int:pk_video>/', DeleteVideo.as_view(), name='video_delete'),  # Удалить видео
 
     # show_all_ralations_to_video - Это вложенный тег (шаблон all_ralations_to_video),
     # В ней находится вывод и обработка формы для комментариев

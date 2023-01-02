@@ -59,8 +59,12 @@
 					<!-- Если пк пользователя = пк автора статьи или 1 -->
 					{% if request.user.pk == v.author_video.pk or request.user.pk == 1 %}
 
-					<a class="btn" href="{% url 'video_update' pk_video=v.pk %}">
+					<a class="btn btn-sm pe-0" href="{% url 'video_update' pk_video=v.pk %}">
 						<img src="{% static 'blog/images/update.png' %}" height="24" width="24" class="img-fluid pb-2">
+					</a>
+
+					<a class="btn btn-sm ps-0" href="{% url 'video_delete' pk_video=v.pk %}">
+						<img src="{% static 'blog/images/delete.png' %}" height="24" width="24" class="img-fluid pb-2">
 					</a>
 
 					{% endif %} <!-- Если пк пользователя = пк автора статьи или 1 -->

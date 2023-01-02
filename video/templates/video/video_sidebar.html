@@ -6,14 +6,17 @@
 		    <a class="nav-link active text-warning pb-2" aria-current="page" href="{% url 'video_add' %}">Добавить видео</a>
 		</li>
 
+
+		{% if sidebar_selected == 'all' %}		
 		<li class="nav-item">
-			<a class="nav-link active" aria-current="page" href="#">Все видео</a>
+			<a class="nav-link disabled" href="{% url 'video_all' %}" tabindex="-1" aria-disabled="true">Все видео</a>
+		</li>
+		{% else %}
+		<li class="nav-item">
+			<a class="nav-link active" aria-current="page" href="{% url 'video_all' %}">Все видео</a>
 		</li>
 
-		<li class="nav-item">
-			<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Все видео</a>
-		</li>
-
+		{% endif %}
 
 
 
