@@ -2,6 +2,7 @@ from django import template
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
 
 from video.forms import CommentVideoYtRtForm
@@ -40,7 +41,7 @@ def show_all_ralations_to_video(request, pk_video=None):
             # всплывающее окно при успешном создании коммента (отображу сверху страницы)
             messages.info(request, f'{request.user.username}! Комментарий к видео: "{video_obj.name}" - создан!')
             # при успешной отправке перенаправит на все видео, т.е останемся на той же странице
-            return redirect('video_all')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  # остаёмся на странице предыдущей!
     else:  # если ещё ничего не отправляли из формы
         form = CommentVideoYtRtForm()  # изначально просто пустая форма
 
@@ -107,7 +108,11 @@ def like_video(request, pk_video):  # эти параметры будут бр�
         )
         like_mark_video_object.save()  # сохраняем запись в БД (LikeMarkVideo)
         messages.info(request, f"{request.user.username}! - вам понравилось видео: '{video_obj.name}'")
-    return redirect('video_all')  # остаёмся на странице
+    # 1 - мы находимся например на странице - http://127.0.0.1:8000/video/bookmarks/
+    # 2 - при нажатии лайка, наш путь будет примерно - http://127.0.0.1:8000/video/like_video/9/
+    # 3 - нам нужно вернуться на первый путь - http://127.0.0.1:8000/video/bookmarks/
+    # 3 - для этого - return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  # остаёмся на странице предыдущей!
 
 
 # поведение кнопки закладки
@@ -139,7 +144,7 @@ def bookmarks_video(request, pk_video):  # эти параметры будут 
         )
         like_mark_video_object.save()  # сохраняем запись в БД (LikeMarkVideo)
         messages.info(request, f"{request.user.username}! - Видео: '{video_obj.name}' - добавлено в ваши закладки")
-    return redirect('video_all')  # остаёмся на странице
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  # остаёмся на странице предыдущей!
 
 
 # вложенный тег получение (отображения) блока лайка на отдельный комментарий к видео
@@ -194,7 +199,7 @@ def like_button_comment_video(request, pk_com):
         messages.info(request, f"Вам понравился комментарий, пользователя: {comment.author_comment}.")
 
     # перенаправляемся/остаёмся на странице списка видео
-    return redirect('video_all')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  # остаёмся на странице предыдущей!
 
 
 # логика кнопки удаления комментария
@@ -211,4 +216,4 @@ def delete_comment_video_button(request, pk_com):
         messages.info(request, f"{request.user.username} - вы не можете удалить чужой комментарий!")
 
     # перенаправляемся/остаёмся на странице списка видео
-    return redirect('video_all')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  # остаёмся на странице предыдущей!
