@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect
+from django.template.defaultfilters import slugify
 from django.urls import reverse_lazy  # перенаправление
 from django.views.generic import UpdateView, DeleteView, DetailView, ListView, TemplateView
 from django.views.generic.edit import FormMixin
@@ -11,6 +12,8 @@ from .forms import CarAddForm, CarUpdateForm  # наши формы forms.py (bl
 from comments.forms import CommentForm  # наши формы forms.py (comments app)
 from .models import *
 from .utils import DataMixin
+from unidecode import unidecode  # преобразование символов в UTF8
+from django.template.defaultfilters import slugify  # преобразование строки в slug
 
 
 # http://127.0.0.1:8000, вход на сайт
@@ -185,7 +188,7 @@ class ShowCar(SuccessMessageMixin, DataMixin, DetailView, FormMixin):
         c_def = self.get_user_context(cat_selected=self.kwargs['cat_slug'],  # выбор категории
                                       relation=self.get_user_relation_to_post(),  # реакции
                                       rating=self.get_rating_post(),  # рейтинг
-                                      total_likes=self.get_total_likes_post()  # количество лайков
+                                      total_likes=self.get_total_likes_post(),  # количество лайков
                                       )
         return {**context, **c_def}  # в шаблон передаём полный контекст
 
@@ -201,6 +204,7 @@ def show_add_post(request):
         if form.is_valid():  # проверка правильности формы, если форма заполнена правильно
             car = form.save(commit=False)  # commit=False - когда нужно внести изменение в поле модели не из формы!
             car.author = request.user  # поле автора заполняется автоматически (залогиненый пользователь)
+            car.slug = slugify(unidecode(car.title))  # Автозаполнение slug/слага! по заполненному в форме полю title
             car.save()  # сохраняем модель
             return redirect('home')  # перенаправление домой при успешном заполнении
     else:  # если никаких данный пользователь ещё не вводил
